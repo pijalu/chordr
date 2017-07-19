@@ -8,13 +8,17 @@ import { AboutComponent } from './about/about.component';
 import { MainComponent } from './main/main.component';
 
 import { AppRoutes} from './app.routes';
+import { ChordInputComponent } from './chord-input/chord-input.component';
+import { ChordComponent } from './chord/chord.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     AboutComponent,
-    MainComponent
+    MainComponent,
+    ChordInputComponent,
+    ChordComponent
   ],
   imports: [
     BrowserModule,
