@@ -1,0 +1,17 @@
+div.chord-component {
+    display:inline-block;
+    padding: 2px; 
+}
+div:hover.chord-component {
+    background: #fafafa;
+    
+    border-radius: 10px;
+    border: 2px solid #aaaaaa;
+    padding: 0px; 
+}
+
+div.chord-component-new {
+    border-radius: 10px;
+    border: 2px dotted #aaaaaa; 
+    padding: 0px; 
+}

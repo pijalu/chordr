@@ -11,6 +11,8 @@ import { AppRoutes} from './app.routes';
 import { ChordInputComponent } from './chord-input/chord-input.component';
 import { ChordComponent } from './chord/chord.component';
 
+import { ModalModule } from 'ngx-bootstrap';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,7 +24,8 @@ import { ChordComponent } from './chord/chord.component';
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(AppRoutes)
+    RouterModule.forRoot(AppRoutes),
+    ModalModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
