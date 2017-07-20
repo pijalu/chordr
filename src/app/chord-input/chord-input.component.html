@@ -12,12 +12,13 @@
     
         preserveAspectRatio="xMinYMin">
         <circle *ngFor="let elm of svg.circles"
+            [id]="elm.cookie.id"
             [attr.cx]="elm.cx"
             [attr.cy]="elm.cy"
             [attr.r]="elm.r"
             [attr.fill]="elm.fill"
             [attr.stroke]="elm.stroke"
-            (click)="hello()">
+            (click)="selectCircle(elm.cookie)">
         </circle>
 
         <path *ngFor="let elm of svg.paths" 
@@ -36,6 +37,7 @@
             font="25px &quot;Arial&quot;"
             style="text-anchor: middle; font: 25px &quot;Arial&quot;;">
             <tspan dy="3.5">{{elm.text}}</tspan>
-        </text>
-    </svg>
+        </text>          
+    </svg>    
+    <p>{{tab}}</p>
 </div>

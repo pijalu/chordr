@@ -1,4 +1,5 @@
 export class SvgCircle {
+    cookie: any;
     fill = '#000000';
     stroke = '#000';
 
@@ -14,6 +15,7 @@ export class SvgCircle {
 }
 
 export class SvgPath {
+    cookie: any;
     fill = 'none';
     stroke = '#000000';
 
@@ -25,6 +27,7 @@ export class SvgPath {
 }
 
 export class SvgText {
+    cookie: any;
     fill = '#000000';
     stroke = 'none';
 
