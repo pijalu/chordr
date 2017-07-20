@@ -1,21 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ChordComponent } from './chord.component';
-import { ChordBoxComponent } from '../chord-box/chord-box.component';
+import { ChordBoxComponent } from './chord-box.component';
 
-describe('ChordComponent', () => {
-  let component: ChordComponent;
-  let fixture: ComponentFixture<ChordComponent>;
+describe('ChordBoxComponent', () => {
+  let component: ChordBoxComponent;
+  let fixture: ComponentFixture<ChordBoxComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ChordComponent, ChordBoxComponent ]
+      declarations: [ ChordBoxComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ChordComponent);
+    fixture = TestBed.createComponent(ChordBoxComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

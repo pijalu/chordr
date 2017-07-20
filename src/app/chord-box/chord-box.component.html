@@ -1,0 +1,36 @@
+<div class="chord-box">
+    <svg height="100" 
+        version="1.1" 
+        width="100" 
+        xmlns="http://www.w3.org/2000/svg" 
+        style="overflow: hidden; position: relative; top: -0.150024px;"
+        viewBox="0 0 100 100" 
+        preserveAspectRatio="xMinYMin">
+        <circle *ngFor="let elm of svg.circles"
+            [attr.cx]="elm.cx"
+            [attr.cy]="elm.cy"
+            [attr.r]="elm.r"
+            [attr.fill]="elm.fill"
+            [attr.stroke]="elm.stroke"
+            [attr.style]="elm.style">
+        </circle>
+
+        <path *ngFor="let elm of svg.paths" 
+            [attr.d]="elm.d"
+            [attr.stroke]="elm.stroke"
+            [attr.fill]="elm.fill"
+            [attr.style]="elm.style">
+        </path>
+
+        <text *ngFor="let elm of svg.texts"
+            [attr.x]="elm.x"
+            [attr.y]="elm.y"
+            [attr.text-anchor]="elm.text_anchor" 
+            [attr.font]="elm.font"
+            [attr.stroke]="elm.stroke"
+            [attr.fill]="elm.fill"
+            [style]="elm.style">
+            <tspan dy="3.5">{{elm.text}}</tspan>
+        </text>
+    </svg>
+</div>

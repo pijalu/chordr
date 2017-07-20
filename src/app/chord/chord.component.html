@@ -1,36 +1,29 @@
 <div class="chord-component">
-    <!-- SVG container -->
-    <div id={{containerId}} [hidden]="!name" (click)="selectChordModal.show()"></div>
-    
-    <div class="modal" 
-        bsModal 
-        #selectChordModal="bs-modal"  
-        [config]="{backdrop: 'static'}"      
-        tabindex="-1" 
-        role="dialog"
-        aria-labelledby="selectChordModalLabel" 
-        aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title pull-left">Select new chord</h4>
-                    <button type="button" class="close pull-right" aria-label="Close" (click)="selectChordModal.hide()">
-                        <span aria-hidden="true">&times;</span>
-                     </button>
-                </div>
-                <div class="modal-body">
-                    Select some chord here !
+    <div>
+        <a href="#{{componentModalId}}">
+            <!-- Actual chord box -->
+            <app-chord-box label="{{root}} {{type}}" tab="{{getTab()}}"></app-chord-box>
+        </a>
+        <div id="{{componentModalId}}" class="modalDialog">
+            <div>
+                <a href="#close" title="Close" class="close">X</a>
+                <h2>Select a chord variations:</h2>
+                <div *ngFor="let variation of getVariations()" class="chord-component">
+                    <app-chord-box label="{{variation.label}}" tab="{{variation.tab}}">
+                    </app-chord-box>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Add new -->
-    <div class="chord-component-new" title="Add new chord" [hidden]="name">
+    <!--
+    <div class="chord-component-new" title="Add new chord">
         <svg height="100" width="100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <circle cx="50" cy="50" r="20" stroke="grey" stroke-width="1" fill="white" />
             <line x1="40" x2="60" y1="50" y2="50" stroke="grey" stroke-width="2" stroke-linecap="round" />
             <line x1="50" x2="50" y1="40" y2="60" stroke="grey" stroke-width="2" stroke-linecap="round" />
         </svg>
     </div>
+    -->
 </div>

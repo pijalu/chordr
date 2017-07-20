@@ -1,31 +1,52 @@
-import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { ChordService } from '../chord.service';
 
 declare var Raphael: any;
+
+class ChordVariationData {
+  constructor(public label: string, public tab: string) {}
+}
 
 @Component({
   selector: 'app-chord',
   templateUrl: './chord.component.html',
-  styleUrls: ['./chord.component.css']
+  styleUrls: ['./chord.component.css'],
+  providers: [ChordService]
 })
-export class ChordComponent implements OnInit, AfterViewInit {
+export class ChordComponent implements OnInit {
   static ids = 0;
 
-  @Input() name: string;
+  @Input() root: string;
 
-  @Input()
-  variation: number;
+  @Input() type: string;
 
-  containerId: string;
+  @Input() variation: number;
 
-  constructor() {
+  componentModalId: string;
+
+  constructor(private chordService: ChordService) {
     ChordComponent.ids++;
-    this.containerId = 'appChord' + ChordComponent.ids;
-  }
-
-  ngAfterViewInit() {
-    Raphael.chord(this.containerId, this.name, Number(this.variation));
+    this.componentModalId = 'ChordComponentModal' + ChordComponent.ids;
   }
 
   ngOnInit() {}
 
+  getTab(): string {
+    return this.chordService.Variations(this.root, this.type, this.variation).join(',');
+  }
+
+  getVariations(): Array<ChordVariationData> {
+    const variations: Array<ChordVariationData> = [];
+    const maxVariation = this.chordService.VariationsCount(this.root, this.type);
+
+    for (let i = 0 ; i < maxVariation; i++) {
+      const variation = this.chordService.Variations(this.root, this.type, i - 1);
+      if (variation) {
+        variations.push(
+          new ChordVariationData(this.root + ' ' + this.type,
+          variation.join(',')));
+      }
+    }
+    return variations;
+  }
 }
