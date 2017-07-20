@@ -8,7 +8,6 @@ import { ChordDefinitions, ChordDefinition } from './models/chord-definitions';
 @Injectable()
 export class ChordService {
   constructor() {
-    console.log('ChordDefinition', ChordDefinitions.definitionsByRoot);
   }
 
   Roots(): Array<string> {

@@ -11,25 +11,24 @@
             [attr.cy]="elm.cy"
             [attr.r]="elm.r"
             [attr.fill]="elm.fill"
-            [attr.stroke]="elm.stroke"
-            [attr.style]="elm.style">
+            [attr.stroke]="elm.stroke">
         </circle>
 
         <path *ngFor="let elm of svg.paths" 
             [attr.d]="elm.d"
             [attr.stroke]="elm.stroke"
-            [attr.fill]="elm.fill"
-            [attr.style]="elm.style">
+            [attr.fill]="elm.fill">
         </path>
 
         <text *ngFor="let elm of svg.texts"
             [attr.x]="elm.x"
-            [attr.y]="elm.y"
-            [attr.text-anchor]="elm.text_anchor" 
-            [attr.font]="elm.font"
+            [attr.y]="elm.y"                      
             [attr.stroke]="elm.stroke"
             [attr.fill]="elm.fill"
-            [style]="elm.style">
+            
+            text-anchor="middle"
+            font="10px &quot;Arial&quot;"
+            style="text-anchor: middle; font: 10px &quot;Arial&quot;;">
             <tspan dy="3.5">{{elm.text}}</tspan>
         </text>
     </svg>

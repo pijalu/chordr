@@ -1,7 +1,6 @@
 export class SvgCircle {
     fill = '#000000';
     stroke = '#000';
-    style = '';
 
     constructor(public cx: number,
         public cy: number,
@@ -17,7 +16,6 @@ export class SvgCircle {
 export class SvgPath {
     fill = 'none';
     stroke = '#000000';
-    style = '';
 
     constructor(public d: string, fill?: string) {
         if (fill) {
@@ -27,9 +25,6 @@ export class SvgPath {
 }
 
 export class SvgText {
-    style = '{text-anchor: middle; font: 10px "Arial";}';
-    text_anchor = 'middle';
-    font = '10px "Arial"';
     fill = '#000000';
     stroke = 'none';
 
