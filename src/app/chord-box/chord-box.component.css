@@ -2,10 +2,20 @@ div.chord-box {
     display:inline-block;
     padding: 2px; 
 }
+
 div:hover.chord-box {
     background: #fafafa;
     
     border-radius: 10px;
     border: 2px solid #aaaaaa;
     padding: 0px; 
+}
+
+.unselectable {
+    cursor: default;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none      /* disables the callout */
 }

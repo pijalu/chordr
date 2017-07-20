@@ -1,10 +1,10 @@
 <p>
   chord-input to do !
 </p>
-<div>
-    <svg height="350" 
+<div class="unselectable">
+    <svg height="700" 
         version="1.1" 
-        width="200" 
+        width="400" 
         
         xmlns="http://www.w3.org/2000/svg" 
         style="overflow: hidden; position: relative; top: -0.150024px;"
@@ -28,6 +28,7 @@
         </path>
 
         <text *ngFor="let elm of svg.texts"
+            class="unselectable"
             [attr.x]="elm.x"
             [attr.y]="elm.y"                      
             [attr.stroke]="elm.stroke"

@@ -52,7 +52,7 @@ export class ChordInputComponent implements OnInit {
 
       if (i && (i === 11 || i < 9 && (i % 2) === 0)) {
         const textPosition = 40 + (40 * (i + 1));
-        svg.addText(new SvgText(250, textPosition - 10, (i + 1) + 'fr'));
+        svg.addText(new SvgText(255, textPosition - 15, (i + 1) + 'fr'));
       }
     }
 
