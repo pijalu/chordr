@@ -1,11 +1,11 @@
-<div class="chord-component">
+<div class="chord-component unselectable">
     <!-- Chord view -->
     <div [hidden]="!root">
         <app-chord-box label="{{root}} {{type}}" tab="{{tab}}" (click)="selectChordModal.show()" title="{{root}} {{type}} variation {{variation}}"></app-chord-box>
     </div>
 
     <!-- Add new -->
-    <div [hidden]="root" class="chord-component-new" title="Add new chord">
+    <div [hidden]="root" class="chord-component-new unselectable" title="Add new chord">
         <svg height="100" width="100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <circle cx="50" cy="50" r="20" stroke="grey" stroke-width="1" fill="white" />
             <line x1="40" x2="60" y1="50" y2="50" stroke="grey" stroke-width="2" stroke-linecap="round" />

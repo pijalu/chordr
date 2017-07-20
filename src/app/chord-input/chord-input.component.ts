@@ -74,8 +74,6 @@ export class ChordInputComponent implements OnInit {
   }
 
   selectCircle(cookie: CircleCookie) {
-    console.log('Clicked', cookie);
-
     if (cookie.id < 6) {
       if (cookie.clicked) {
         cookie.mutted = true;

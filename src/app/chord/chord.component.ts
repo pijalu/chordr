@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ChordService } from '../chord.service';
-import { FormsModule } from '@angular/forms';
 
 class ChordVariationData {
   constructor(public label: string, public tab: string, public variation: number) {}

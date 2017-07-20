@@ -16,6 +16,7 @@ export class ChordBoxComponent implements OnInit, OnChanges {
   constructor() {}
 
   ngOnInit() {
+    this.setupSvg();
   }
 
   ngOnChanges() {

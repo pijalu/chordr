@@ -1,10 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 
 import { MainComponent } from './main.component';
 import { ModalModule } from 'ngx-bootstrap';
 import { ChordComponent } from '../chord/chord.component';
 
 import { ChordBoxComponent } from '../chord-box/chord-box.component';
+import { ChordInputComponent } from '../chord-input/chord-input.component'
+
 
 describe('MainComponent', () => {
   let component: MainComponent;
@@ -12,8 +15,9 @@ describe('MainComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ChordComponent, ChordBoxComponent, MainComponent ],
+      declarations: [ ChordInputComponent, ChordComponent, ChordBoxComponent, MainComponent ],
       imports: [
+        FormsModule,
         ModalModule.forRoot()
       ],
     })
