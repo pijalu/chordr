@@ -1,3 +1,41 @@
 <p>
   chord-input to do !
 </p>
+<div>
+    <svg height="350" 
+        version="1.1" 
+        width="200" 
+        
+        xmlns="http://www.w3.org/2000/svg" 
+        style="overflow: hidden; position: relative; top: -0.150024px;"
+        viewBox="0 0 300 500" 
+    
+        preserveAspectRatio="xMinYMin">
+        <circle *ngFor="let elm of svg.circles"
+            [attr.cx]="elm.cx"
+            [attr.cy]="elm.cy"
+            [attr.r]="elm.r"
+            [attr.fill]="elm.fill"
+            [attr.stroke]="elm.stroke"
+            (click)="hello()">
+        </circle>
+
+        <path *ngFor="let elm of svg.paths" 
+            [attr.d]="elm.d"
+            [attr.stroke]="elm.stroke"
+            [attr.fill]="elm.fill">
+        </path>
+
+        <text *ngFor="let elm of svg.texts"
+            [attr.x]="elm.x"
+            [attr.y]="elm.y"                      
+            [attr.stroke]="elm.stroke"
+            [attr.fill]="elm.fill"
+            
+            text-anchor="middle"
+            font="25px &quot;Arial&quot;"
+            style="text-anchor: middle; font: 25px &quot;Arial&quot;;">
+            <tspan dy="3.5">{{elm.text}}</tspan>
+        </text>
+    </svg>
+</div>
