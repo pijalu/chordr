@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
@@ -13,6 +14,8 @@ import { ChordComponent } from './chord/chord.component';
 
 import { ChordBoxComponent } from './chord-box/chord-box.component';
 
+import { ModalModule } from 'ngx-bootstrap/modal';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +28,9 @@ import { ChordBoxComponent } from './chord-box/chord-box.component';
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(AppRoutes)
+    FormsModule,
+    RouterModule.forRoot(AppRoutes),
+    ModalModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]

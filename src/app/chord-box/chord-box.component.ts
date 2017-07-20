@@ -1,13 +1,12 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { Svg, SvgCircle, SvgPath, SvgText } from '../svg/svg';
 
 @Component({
   selector: 'app-chord-box',
   templateUrl: './chord-box.component.html',
-  styleUrls: ['./chord-box.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./chord-box.component.css']
 })
-export class ChordBoxComponent implements OnInit {
+export class ChordBoxComponent implements OnInit, OnChanges {
   @Input() label: string;
 
   @Input() tab: string;
@@ -17,6 +16,13 @@ export class ChordBoxComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
+  }
+
+  ngOnChanges() {
+    this.setupSvg();
+  }
+
+  setupSvg() {
     if (this.tab) {
       this.svg = this.buildChordSvg(this.label,
           this.tabToTabValue(this.tab));

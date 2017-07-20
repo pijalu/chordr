@@ -1,10 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ChordService } from '../chord.service';
-
-declare var Raphael: any;
+import { FormsModule } from '@angular/forms';
 
 class ChordVariationData {
-  constructor(public label: string, public tab: string) {}
+  constructor(public label: string, public tab: string, public variation: number) {}
 }
 
 @Component({
@@ -14,39 +13,68 @@ class ChordVariationData {
   providers: [ChordService]
 })
 export class ChordComponent implements OnInit {
-  static ids = 0;
-
   @Input() root: string;
 
   @Input() type: string;
 
   @Input() variation: number;
 
-  componentModalId: string;
+  // Select items
+  selectedRoot: string;
+  availableType: Array<string>;
+  selectedType: string;
+  availableVariation: Array<ChordVariationData>;
+
+  tab: string;
 
   constructor(private chordService: ChordService) {
-    ChordComponent.ids++;
-    this.componentModalId = 'ChordComponentModal' + ChordComponent.ids;
   }
 
-  ngOnInit() {}
-
-  getTab(): string {
-    return this.chordService.Variations(this.root, this.type, this.variation).join(',');
+  ngOnInit() {
+    this.tab = this.chordService.Variations(this.root, this.type, this.variation).join(',');
+    this.resetSelected();
   }
 
-  getVariations(): Array<ChordVariationData> {
-    const variations: Array<ChordVariationData> = [];
-    const maxVariation = this.chordService.VariationsCount(this.root, this.type);
+  resetSelected() {
+    this.selectedRoot = this.root;
+    this.selectedType = this.type;
+    this.onTypeChange(this.selectedType);
+  }
 
-    for (let i = 0 ; i < maxVariation; i++) {
-      const variation = this.chordService.Variations(this.root, this.type, i - 1);
+  onRootChange(newRoot: string) {
+    this.availableType = this.chordService.Types(newRoot);
+    this.selectedType = this.availableType[0];
+    this.onTypeChange(this.selectedType);
+  }
+
+  onTypeChange(newType: string) {
+    this.availableVariation = [];
+
+    const nbVariation = this.chordService.VariationsCount(this.selectedRoot, newType);
+    for (let i = 0; i < nbVariation; ++i) {
+      const variation = this.chordService.Variations(this.selectedRoot, this.selectedType, i - 1);
       if (variation) {
-        variations.push(
-          new ChordVariationData(this.root + ' ' + this.type,
-          variation.join(',')));
+        this.availableVariation.push(
+          new ChordVariationData(this.selectedRoot + ' ' + this.selectedType,
+          variation.join(','),
+          i - 1));
       }
     }
-    return variations;
+  }
+
+  selectChord(root: string, type: string, variation: number) {
+    console.log('We change to ', root, type, variation);
+    this.root = root;
+    this.type = type;
+    this.variation = variation;
+    this.tab = this.chordService.Variations(this.root, this.type, this.variation).join(',');
+  }
+
+  Roots(): Array<string> {
+    return this.chordService.Roots();
+  }
+
+  Types(root: string): Array<string> {
+    return this.chordService.Types(root);
   }
 }
