@@ -1,6 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Svg, SvgCircle, SvgPath, SvgText } from '../svg/svg';
 
+import { Chords as ChordEngine } from '../../engine/chords';
+import { Fretboard } from '../../engine/fretboard';
+import { Notes } from '../../engine/note';
+
 class CircleCookie {
   clicked = false;
   mutted = false;
@@ -13,7 +17,7 @@ class CircleCookie {
 
 
 export class ChangeEvent {
-  constructor(public tab: string) { }
+  constructor(public name: string, public type: string, public tab: string) { }
 }
 
 @Component({
@@ -35,13 +39,18 @@ export class ChordInputComponent implements OnInit {
   @Output()
   onChange = new EventEmitter<ChangeEvent>();
 
+  chordName: string;
+  chordType: string;
+
   constructor() {}
 
   ngOnInit() {
-    if (this.tab === undefined) {
+    if (this.tab === undefined
+      || this.tab.length < 6) {
       this.tab = '-1,-1,-1,-1,-1,-1';
     }
     this.buildSvg();
+    this.evaluateTab();
   }
 
   tab2array(tab: string): Array<number> {
@@ -113,7 +122,6 @@ export class ChordInputComponent implements OnInit {
   }
 
   selectCircle(cookie: CircleCookie) {
-    console.log('cookie', cookie);
     if (cookie.id < 6) {
       if (cookie.clicked) {
         cookie.mutted = true;
@@ -167,7 +175,17 @@ export class ChordInputComponent implements OnInit {
       }
     }
     this.tab = tabs.join(',');
-    console.log('tab', this.tab);
-    this.onChange.emit(new ChangeEvent(this.tab));
+    this.evaluateTab();
+    this.onChange.emit(new ChangeEvent(this.chordName, this.chordType, this.tab));
+  }
+
+  evaluateTab() {
+    const fretboard = Fretboard.Fretboard.From('E');
+    const notes = fretboard.asNotes(this.tab);
+    const result = ChordEngine.Chord.fromNotes(notes);
+    if (result !== undefined) {
+      this.chordName = result.Name();
+      this.chordType = result.Type().toLowerCase();
+    }
   }
 }

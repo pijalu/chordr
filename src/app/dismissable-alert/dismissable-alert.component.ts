@@ -3,7 +3,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { LocalStorageService } from 'angular-2-local-storage';
 
 class Status {
-  constructor(public dismissed: boolean) {}
+  constructor(public dismissed: boolean) { }
 }
 
 @Component({
@@ -22,17 +22,14 @@ export class DismissableAlertComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('status', 'alert_' + this.key, this.localStorageService.get('alert_' + this.key));
     this.status = this.localStorageService.get('alert_' + this.key);
     if (this.status === null) {
       this.status = new Status(false);
     }
-    console.log('status', this.status);
   }
 
   dismiss() {
     this.status.dismissed = true;
     this.localStorageService.set('alert_' + this.key, this.status);
-    console.log('status', 'alert_' + this.key, this.localStorageService.get('alert_' + this.key));
   }
 }

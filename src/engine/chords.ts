@@ -83,7 +83,7 @@ export namespace Chords {
          * returns null if there are no matching chords
          */
         public static fromNotes(notes: Array<Notes.Note>): Chord {
-            let bestChord: Chord = null;
+            let bestChord: Chord;
             let bestScore: number = -1;
 
             const uniqNotes = Chord.deDup(notes);

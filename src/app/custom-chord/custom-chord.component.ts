@@ -18,12 +18,13 @@ export class CustomChordComponent implements OnInit {
   @Input() name: string;
   @Input() tab: string;
 
-  updatedTab: string;
+  update: InputChangeEvent;
 
   @Output() onChange = new EventEmitter<ChangeEvent>();
   constructor() { }
 
   ngOnInit() {
+    this.update = new InputChangeEvent(undefined, undefined, this.tab);
   }
 
   remove() {
@@ -31,10 +32,10 @@ export class CustomChordComponent implements OnInit {
   }
 
   updateChord() {
-    this.onChange.emit(new ChangeEvent(this.id, this.updatedTab, false));
+    this.onChange.emit(new ChangeEvent(this.id, this.update.tab, false));
   }
 
   tabChange(evt: InputChangeEvent) {
-    this.updatedTab = evt.tab;
+    this.update = evt;
   }
 }

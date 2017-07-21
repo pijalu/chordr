@@ -23,6 +23,7 @@ import { LocalStorageModule } from 'angular-2-local-storage';
 import { DismissableAlertComponent } from './dismissable-alert/dismissable-alert.component';
 import { TabPipe } from './tab.pipe';
 import { CustomChordComponent } from './custom-chord/custom-chord.component';
+import { TabToNotesPipe } from './tab-to-notes.pipe';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { CustomChordComponent } from './custom-chord/custom-chord.component';
     ModeExplorerComponent,
     DismissableAlertComponent,
     TabPipe,
-    CustomChordComponent
+    CustomChordComponent,
+    TabToNotesPipe
   ],
   imports: [
     BrowserModule,

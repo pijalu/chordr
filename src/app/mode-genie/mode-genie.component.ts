@@ -86,8 +86,9 @@ export class ModeGenieComponent implements OnInit {
     const fretboard = Fretboard.Fretboard.From('E');
     const notes = fretboard.asNotes(c.tab);
     const result = ChordEngine.Chord.fromNotes(notes);
-
-    c.name = result.Name();
-    c.type = result.Type().toLowerCase();
+    if (result !== undefined) {
+      c.name = result.Name();
+      c.type = result.Type().toLowerCase();
+    }
   }
 }
