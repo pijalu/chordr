@@ -15,6 +15,9 @@ import { ChordComponent } from './chord/chord.component';
 import { ChordBoxComponent } from './chord-box/chord-box.component';
 
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { ModeGenieComponent } from './mode-genie/mode-genie.component';
+import { ChordLibraryComponent } from './chord-library/chord-library.component';
+import { ModeExplorerComponent } from './mode-explorer/mode-explorer.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,10 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     MainComponent,
     ChordInputComponent,
     ChordComponent,
-    ChordBoxComponent
+    ChordBoxComponent,
+    ModeGenieComponent,
+    ChordLibraryComponent,
+    ModeExplorerComponent
   ],
   imports: [
     BrowserModule,
