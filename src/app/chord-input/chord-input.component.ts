@@ -114,7 +114,7 @@ export class ChordInputComponent implements OnInit {
     this.updateTab();
 
     if (cookie.mutted) {
-      this.circleMap[cookie.id].fill = '#ff0000';
+      this.circleMap[cookie.id].fill = 'url(#crossPattern)';
     } else if (cookie.clicked) {
       this.circleMap[cookie.id].fill = '#000000';
     } else {
