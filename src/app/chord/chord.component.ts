@@ -1,8 +1,17 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ChordService } from '../chord.service';
 
 class ChordVariationData {
-  constructor(public label: string, public tab: string, public variation: number) {}
+  constructor(public label: string, public tab: string, public variation: number) { }
+}
+
+export class ChangeEvent {
+  constructor(public id: string,
+    public root: string,
+    public type: string,
+    public variation: number,
+    public tab: string,
+    public removed: boolean) { }
 }
 
 @Component({
@@ -12,11 +21,15 @@ class ChordVariationData {
   providers: [ChordService]
 })
 export class ChordComponent implements OnInit {
+  @Input() id: string;
+
   @Input() root: string;
 
   @Input() type: string;
 
   @Input() variation: number;
+
+  @Output() onChange = new EventEmitter<ChangeEvent>();
 
   // Select items
   selectedRoot: string;
@@ -55,18 +68,20 @@ export class ChordComponent implements OnInit {
       if (variation) {
         this.availableVariation.push(
           new ChordVariationData(this.selectedRoot + ' ' + this.selectedType,
-          variation.join(','),
-          i - 1));
+            variation.join(','),
+            i - 1));
       }
     }
   }
 
   selectChord(root: string, type: string, variation: number) {
-    console.log('We change to ', root, type, variation);
+    //console.log('We change to ', root, type, variation);
     this.root = root;
     this.type = type;
     this.variation = variation;
     this.tab = this.chordService.Variations(this.root, this.type, this.variation).join(',');
+
+    this.onChange.emit(new ChangeEvent(this.id, this.root, this.type, this.variation, this.tab, false));
   }
 
   Roots(): Array<string> {

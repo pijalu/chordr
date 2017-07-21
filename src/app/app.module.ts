@@ -19,6 +19,8 @@ import { ModeGenieComponent } from './mode-genie/mode-genie.component';
 import { ChordLibraryComponent } from './chord-library/chord-library.component';
 import { ModeExplorerComponent } from './mode-explorer/mode-explorer.component';
 
+import { LocalStorageModule } from 'angular-2-local-storage';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,6 +39,10 @@ import { ModeExplorerComponent } from './mode-explorer/mode-explorer.component';
     FormsModule,
     RouterModule.forRoot(AppRoutes),
     ModalModule.forRoot(),
+    LocalStorageModule.withConfig({
+            prefix: 'chordr-app',
+            storageType: 'localStorage'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

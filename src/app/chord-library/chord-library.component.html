@@ -1,3 +1,17 @@
-<p>
-  chord-library TODO
-</p>
+<div>
+<p>Build your chord progression</p>
+</div>
+
+<div *ngFor="let chord of chords" class="chord">
+  <app-chord 
+    [id]="chord.id" 
+    [root]="chord.root" 
+    [type]="chord.type" 
+    [variation]="chord.variation"
+    (onChange)="onChange($event)"></app-chord>
+</div>
+  
+<div class="text-right">
+  <hr class="half-rule"/>
+  <button type="button" class="btn btn-danger btn-sm" (click)="clear()">Clear</button> 
+</div>
