@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Svg, SvgCircle, SvgPath, SvgText } from '../svg/svg';
 
 class CircleCookie {
@@ -29,20 +29,41 @@ export class ChordInputComponent implements OnInit {
 
   svg: Svg;
 
+  @Input()
+  tab: string;
+
   @Output()
   onChange = new EventEmitter<ChangeEvent>();
 
-  tab: string;
+  constructor() {}
 
-  constructor() {
+  ngOnInit() {
+    if (this.tab === undefined) {
+      this.tab = '-1,-1,-1,-1,-1,-1';
+    }
     this.buildSvg();
   }
 
-  ngOnInit() { }
+  tab2array(tab: string): Array<number> {
+    const result: Array<number> = [];
+    for (const note of tab.toLowerCase().split(/\ |,/)) {
+      console.log('note', note);
+      if (note === 'x') {
+        result.push(-1);
+      } else {
+        result.push(Number.parseInt(note));
+      }
+    }
+    console.log('tab2array', tab, result);
+    return result;
+  }
+
 
   buildSvg() {
     const svg: Svg = new Svg();
     const circleMap = new Map();
+    const playedTab = this.tab2array(this.tab);
+
     let circleId = 0;
 
     svg.addPath(new SvgPath('M20 32L220 32L220 40L20 40L20 32', '#000'));
@@ -68,19 +89,33 @@ export class ChordInputComponent implements OnInit {
         const positionX = 20 + (40 * x);
         const positionY = 20 + (40 * y);
         const circle = new SvgCircle(positionX, positionY, 12, '#ffffff');
+
         circle.cookie = new CircleCookie(circleId, y, x);
+        if (playedTab[x] === -1 && y === 0) {
+          circle.cookie.mutted = true;
+          circle.fill = 'url(#crossPattern)';
+        } else if (playedTab[x] === y) {
+          circle.cookie.clicked = true;
+          circle.fill = '#000000';
+        }
 
         circleMap[circleId] = circle;
         circleId++;
         svg.addCircle(circle);
+
+        // change/unselect previous (if any)
+        if (circle.cookie.clicked || circle.cookie.mutted) {
+          // Update selection
+          this.selectedStringCircle[circle.cookie.string] = circle;
+        }
       }
     }
     this.circleMap = circleMap;
     this.svg = svg;
-    this.updateTab();
   }
 
   selectCircle(cookie: CircleCookie) {
+    console.log('cookie', cookie);
     if (cookie.id < 6) {
       if (cookie.clicked) {
         cookie.mutted = true;

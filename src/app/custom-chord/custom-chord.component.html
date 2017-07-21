@@ -1,0 +1,41 @@
+<div class="chord-component unselectable">
+  <!-- Chord view -->
+  <div [hidden]="!tab" style="position: relative;">
+    <app-chord-box label="{{label}}" tab="{{tab}}" (click)="selectChordModal.show()"></app-chord-box>
+    <div style="position: absolute; bottom: 0px; right: 0px">
+      <button type="button" class="btn btn-link fa fa-times button-remove" (click)="remove()" title="Remove">      
+      </button>
+    </div>
+  </div>
+
+  <!-- Add new -->
+  <div [hidden]="tab" class="chord-component-new unselectable" title="Add new chord" (click)="selectChordModal.show()">
+    <svg class="unselectable" height="100" width="100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+      title="Add new chord">
+      <circle cx="50" cy="50" r="20" stroke="grey" stroke-width="1" fill="white" />
+      <line x1="40" x2="60" y1="50" y2="50" stroke="grey" stroke-width="2" stroke-linecap="round" />
+      <line x1="50" x2="50" y1="40" y2="60" stroke="grey" stroke-width="2" stroke-linecap="round" />
+    </svg>
+  </div>
+</div>
+
+<!-- Select chord dialog -->
+<div class="modal" bsModal #selectChordModal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="selectChordlModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title pull-left">Enter chord</h5>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="selectChordModal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-chord-input tab="{{tab}}" (onChange)="tabChange($event)"></app-chord-input>
+        <button type="button" class="btn btn-primary pull-right" aria-label="Close" (click)="updateChord(); selectChordModal.hide()">
+           <span aria-hidden="true">confirm</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

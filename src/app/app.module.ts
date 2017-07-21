@@ -21,6 +21,8 @@ import { ModeExplorerComponent } from './mode-explorer/mode-explorer.component';
 
 import { LocalStorageModule } from 'angular-2-local-storage';
 import { DismissableAlertComponent } from './dismissable-alert/dismissable-alert.component';
+import { TabPipe } from './tab.pipe';
+import { CustomChordComponent } from './custom-chord/custom-chord.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { DismissableAlertComponent } from './dismissable-alert/dismissable-alert
     ModeGenieComponent,
     ChordLibraryComponent,
     ModeExplorerComponent,
-    DismissableAlertComponent
+    DismissableAlertComponent,
+    TabPipe,
+    CustomChordComponent
   ],
   imports: [
     BrowserModule,

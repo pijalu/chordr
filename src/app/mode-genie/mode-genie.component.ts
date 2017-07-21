@@ -1,5 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { ChangeEvent } from '../chord-input/chord-input.component';
+import { ChangeEvent } from '../custom-chord/custom-chord.component';
+
+import { LocalStorageService } from 'angular-2-local-storage';
+
+class Chord {
+  static ids = 0;
+  id: string;
+
+  constructor(public name: string, public tab: string) {
+    this.id = 'chorddata_' + Chord.ids;
+    Chord.ids++;
+  }
+}
+
+
+const chordsStorageKey = 'ModeGenieComponent_chords';
 
 @Component({
   selector: 'app-mode-genie',
@@ -7,36 +22,38 @@ import { ChangeEvent } from '../chord-input/chord-input.component';
   styleUrls: ['./mode-genie.component.css']
 })
 export class ModeGenieComponent implements OnInit {
-  public tab: string;
-  public inputTab: string;
+  public chords: Array<Chord> = [];
 
-  constructor() { }
+  constructor(private localStorageService: LocalStorageService) {
+    this.chords = localStorageService.get(chordsStorageKey);
+    if (this.chords === null) {
+      this.clear();
+    }
+  }
+
+  clear() {
+    this.chords = [
+      new Chord(undefined, undefined)
+    ];
+    this.localStorageService.set(chordsStorageKey, this.chords);
+  }
 
   ngOnInit() {
   }
 
-  readableTab(tab: string): string {
-    if (tab === undefined) {
-      return '';
-    }
-
-    const readableTabParts: Array<string> = [];
-    for (const item of tab.toLowerCase().split(',')) {
-      if (item === '-1') {
-        readableTabParts.push('x');
-      } else {
-        readableTabParts.push(item);
+  onChange(event: ChangeEvent) {
+    console.log('change', event);
+    if (event.removed) {
+      this.chords = this.chords.filter(c => c.id !== event.id);
+    } else {
+      for (const chord of this.chords) {
+        if (chord.id === event.id) {
+          if (chord.tab === undefined) {
+            this.chords.push(new Chord(undefined, undefined));
+          }
+          chord.tab = event.tab;
+        }
       }
     }
-    return readableTabParts.join(' ');
-  }
-
-  onChange(event: ChangeEvent) {
-    this.tab = (event.tab);
-    this.inputTab = this.readableTab(this.tab);
-  }
-
-  addChord() {
-    console.log('Add chord', this.inputTab);
   }
 }
