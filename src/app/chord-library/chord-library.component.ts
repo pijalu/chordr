@@ -5,11 +5,18 @@ import { LocalStorageService } from 'angular-2-local-storage';
 
 class Chord {
   static ids = 0;
+
   id: string;
+  numericId: number;
   tab: string;
+
+  static reset() {
+    Chord.ids = 0;
+  }
 
   constructor(public root: string, public type: string, public variation: number) {
     this.id = 'chord_' + Chord.ids;
+    this.numericId = Chord.ids;
     Chord.ids++;
   }
 }
@@ -29,12 +36,19 @@ export class ChordLibraryComponent implements OnInit {
     if (this.chords === null) {
       this.clear();
     }
+    // Fix Chords top id after reload
+    this.chords.forEach(c => {
+      if (c.numericId >= Chord.ids) {
+        Chord.ids = c.numericId + 1;
+      }
+    });
   }
 
   ngOnInit() {
   }
 
   clear() {
+    Chord.reset();
     this.chords = [
       // Add
       new Chord(undefined, undefined, undefined)
@@ -49,7 +63,7 @@ export class ChordLibraryComponent implements OnInit {
     } else {
       for (const chord of this.chords) {
         if (chord.id === evt.id) {
-          if (chord.root === undefined) {
+          if (chord.numericId === (Chord.ids - 1)) {
             this.chords.push(new Chord(undefined, undefined, undefined));
           }
           chord.root = evt.root;

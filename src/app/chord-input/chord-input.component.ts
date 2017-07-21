@@ -47,14 +47,12 @@ export class ChordInputComponent implements OnInit {
   tab2array(tab: string): Array<number> {
     const result: Array<number> = [];
     for (const note of tab.toLowerCase().split(/\ |,/)) {
-      console.log('note', note);
       if (note === 'x') {
         result.push(-1);
       } else {
         result.push(Number.parseInt(note));
       }
     }
-    console.log('tab2array', tab, result);
     return result;
   }
 
