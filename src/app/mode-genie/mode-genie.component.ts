@@ -3,6 +3,10 @@ import { ChangeEvent } from '../custom-chord/custom-chord.component';
 
 import { LocalStorageService } from 'angular-2-local-storage';
 
+import { Chords as ChordEngine } from '../../engine/chords';
+import { Fretboard } from '../../engine/fretboard';
+import { Notes } from '../../engine/note';
+
 class Chord {
   static ids = 0;
 
@@ -13,7 +17,7 @@ class Chord {
     Chord.ids = 0;
   }
 
-  constructor(public name: string, public tab: string) {
+  constructor(public name?: string, public type?: string, public tab?: string) {
     this.id = 'chorddata_' + Chord.ids;
     // save numeric id
     this.numericId = Chord.ids;
@@ -49,7 +53,7 @@ export class ModeGenieComponent implements OnInit {
   clear() {
     Chord.reset();
     this.chords = [
-      new Chord(undefined, undefined)
+      new Chord()
     ];
     this.localStorageService.set(chordsStorageKey, this.chords);
   }
@@ -64,12 +68,26 @@ export class ModeGenieComponent implements OnInit {
       for (const chord of this.chords) {
         if (chord.id === event.id) {
           if (chord.numericId === Chord.ids - 1) {
-            this.chords.push(new Chord(undefined, undefined));
+            this.chords.push(new Chord());
           }
           chord.tab = event.tab;
+          try {
+            this.evaluate(chord);
+          } catch (e) {
+            console.log('Error during evaluation', e);
+          }
         }
       }
     }
     this.localStorageService.set(chordsStorageKey, this.chords);
+  }
+
+  evaluate(c: Chord) {
+    const fretboard = Fretboard.Fretboard.From('E');
+    const notes = fretboard.asNotes(c.tab);
+    const result = ChordEngine.Chord.fromNotes(notes);
+
+    c.name = result.Name();
+    c.type = result.Type().toLowerCase();
   }
 }

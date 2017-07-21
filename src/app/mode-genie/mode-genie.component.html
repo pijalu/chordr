@@ -2,5 +2,5 @@
 </app-dismissable-alert>
 
 <div *ngFor="let chord of chords" class="chord-component unselectable" >
-    <app-custom-chord [id]="chord.id" [name]="chord.name" [tab]="chord.tab" (onChange)="onChange($event)"></app-custom-chord>
+    <app-custom-chord [id]="chord.id" name="≈{{chord.name}} {{chord.type}}" [tab]="chord.tab" (onChange)="onChange($event)"></app-custom-chord>
 </div>
