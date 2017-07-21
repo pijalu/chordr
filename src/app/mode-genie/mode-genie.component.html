@@ -1,4 +1,34 @@
-<img src="../assets/svgs/genie.svg" height="32" width="32"/>
-<p>
-  mode-genie works!
-</p>
+<app-dismissable-alert key="modeGenie" title="Genie" text=" enter chords and mode genie will try to complete your progression.">  
+</app-dismissable-alert>
+
+<div class="chord-component unselectable">
+<!-- Add new -->
+<div class="chord-component-new unselectable" title="Add new chord" (click)="selectChordModal.show()">
+  <svg class="unselectable" height="100" width="100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" title="Add new chord">
+    <circle cx="50" cy="50" r="20" stroke="grey" stroke-width="1" fill="white" />
+    <line x1="40" x2="60" y1="50" y2="50" stroke="grey" stroke-width="2" stroke-linecap="round" />
+    <line x1="50" x2="50" y1="40" y2="60" stroke="grey" stroke-width="2" stroke-linecap="round" />
+  </svg>
+</div>
+</div>
+
+<!-- Select chord dialog -->
+<div class="modal" bsModal #selectChordModal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="selectChordlModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title pull-left">Enter played chord: {{inputTab}}</h5>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="selectChordModal.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <app-chord-input (onChange)="onChange($event)"></app-chord-input>
+                <button type="button" class="btn btn-primary pull-right" aria-label="Close" (click)="addChord(); selectChordModal.hide()">
+                    <span aria-hidden="true">Add chord !</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

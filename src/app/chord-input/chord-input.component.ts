@@ -1,4 +1,4 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Svg, SvgCircle, SvgPath, SvgText } from '../svg/svg';
 
 class CircleCookie {
@@ -9,6 +9,11 @@ class CircleCookie {
     public id: number,
     public fret: number,
     public string: number) { }
+}
+
+
+export class ChangeEvent {
+  constructor(public tab: string) { }
 }
 
 @Component({
@@ -25,6 +30,8 @@ export class ChordInputComponent implements OnInit {
   svg: Svg;
 
   @Output()
+  onChange = new EventEmitter<ChangeEvent>();
+
   tab: string;
 
   constructor() {
@@ -128,5 +135,6 @@ export class ChordInputComponent implements OnInit {
     }
     this.tab = tabs.join(',');
     console.log('tab', this.tab);
+    this.onChange.emit(new ChangeEvent(this.tab));
   }
 }
