@@ -16,5 +16,18 @@
     <a href="../assets/svgs/genie.svg" target="_new">
     <img width="32" height="32" src="../assets/svgs/genie.svg">
     </a>Created by Krisztián Mátyásfrom from the <a href="https://thenounproject.com/">Noun Project</a>
-  </li>  
+  </li>
 </ul>
+
+<h3>Troubleshooting</h3>
+<div>
+  <div [hidden]="!isResetInfoShown">
+    <div class="alert alert-info fade show" role="alert">
+      <button type="button" class="close" aria-label="Close" (click)="toggleResetInfoShown()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <strong>Local storage</strong> has been cleared !
+    </div>    
+  </div>
+  <button type="button" class="btn btn-danger btn-sm" (click)="clearStorage()">Reset all local storage</button>
+</div>

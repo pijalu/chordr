@@ -1,7 +1,11 @@
 <div class="chord-component unselectable">
     <!-- Chord view -->
-    <div [hidden]="!root">
-        <app-chord-box label="{{root}} {{type}}" tab="{{tab}}" (click)="selectChordModal.show()" title="{{root}} {{type}} variation {{variation}}"></app-chord-box>
+    <div [hidden]="!root" style="position: relative;">
+        <app-chord-box label="{{root}} {{type}}" tab="{{tab}}" (click)="selectChordModal.show()" title="{{root}} {{type}} variation {{variation}}"></app-chord-box>        
+        <div style="position: absolute; bottom: 0px; right: 0px">
+            <button type="button" class="btn btn-link fa fa-times button-remove" (click)="remove()" title="Remove">      
+            </button>
+        </div>
     </div>
 
     <!-- Add new -->

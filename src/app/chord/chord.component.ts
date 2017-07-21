@@ -75,13 +75,16 @@ export class ChordComponent implements OnInit {
   }
 
   selectChord(root: string, type: string, variation: number) {
-    //console.log('We change to ', root, type, variation);
     this.root = root;
     this.type = type;
     this.variation = variation;
     this.tab = this.chordService.Variations(this.root, this.type, this.variation).join(',');
 
     this.onChange.emit(new ChangeEvent(this.id, this.root, this.type, this.variation, this.tab, false));
+  }
+
+  remove() {
+    this.onChange.emit(new ChangeEvent(this.id, this.root, this.type, this.variation, this.tab, true));
   }
 
   Roots(): Array<string> {

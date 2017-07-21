@@ -37,14 +37,14 @@ export class ChordLibraryComponent implements OnInit {
   clear() {
     this.chords = [
       // Add
-        new Chord(undefined, undefined, undefined)
-      ];
-      this.localStorageService.set(chordsStorageKey, this.chords);
+      new Chord(undefined, undefined, undefined)
+    ];
+    this.localStorageService.set(chordsStorageKey, this.chords);
   }
 
   onChange(evt: ChangeEvent) {
     if (evt.removed) {
-      this.chords.filter(c => c.id !== evt.id);
+      this.chords = this.chords.filter(c => c.id !== evt.id);
     } else {
       for (const chord of this.chords) {
         if (chord.id === evt.id) {

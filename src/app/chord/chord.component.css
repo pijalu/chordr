@@ -17,3 +17,7 @@ div:hover.chord-component-new {
     
     padding: 0px; 
 }
+
+.button-remove {
+    color: red;
+}

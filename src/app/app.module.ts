@@ -20,6 +20,7 @@ import { ChordLibraryComponent } from './chord-library/chord-library.component';
 import { ModeExplorerComponent } from './mode-explorer/mode-explorer.component';
 
 import { LocalStorageModule } from 'angular-2-local-storage';
+import { DismissableAlertComponent } from './dismissable-alert/dismissable-alert.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { LocalStorageModule } from 'angular-2-local-storage';
     ChordBoxComponent,
     ModeGenieComponent,
     ChordLibraryComponent,
-    ModeExplorerComponent
+    ModeExplorerComponent,
+    DismissableAlertComponent
   ],
   imports: [
     BrowserModule,
