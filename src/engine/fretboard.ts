@@ -1,7 +1,7 @@
 import { Notes } from './note';
 
 /** Fretboard items */
-export namespace Fretboard {
+export namespace Fretboards {
     /** Map helper */
     interface TuningMap<V> {
         [k: string]: V;
@@ -49,9 +49,9 @@ export namespace Fretboard {
         }
 
         /** asNotes return a give tab as notes */
-        public asNotes(tab?: string): Array<Notes.Note> {
+        public asNotes(tab: string): Array<Notes.Note> {
             if (!tab) {
-                return this.tuning;
+                return [];
             }
 
             const tabInterval: Array<number> = [];

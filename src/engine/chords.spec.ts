@@ -1,5 +1,5 @@
 import { Chords } from './chords';
-import { Fretboard } from './fretboard';
+import { Fretboards } from './fretboard';
 import { Notes } from './note';
 
 import { expect } from 'chai';
@@ -34,7 +34,7 @@ describe('Chord class', () => {
             }
         ];
         for (const testItem of testItems) {
-            const fretboard = Fretboard.Fretboard.From(testItem.tuning);
+            const fretboard = Fretboards.Fretboard.From(testItem.tuning);
             const notes = fretboard.asNotes(testItem.tab);
             const chord = Chords.Chord.fromNotes(notes);
 
@@ -60,12 +60,11 @@ describe('Chord class', () => {
             {
                 tuning: 'E',
                 tab: '12 14 14 x x x',
-                expectedChord: 'E MAJ',
-            },
+                expectedChord: 'E MAJ',            },
         ];
 
         for (const testItem of testItems) {
-            const fretboard = Fretboard.Fretboard.From(testItem.tuning);
+            const fretboard = Fretboards.Fretboard.From(testItem.tuning);
             const notes = fretboard.asNotes(testItem.tab);
             const chord = Chords.Chord.fromNotes(notes);
 

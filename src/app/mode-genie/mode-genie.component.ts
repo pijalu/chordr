@@ -4,7 +4,7 @@ import { ChangeEvent } from '../custom-chord/custom-chord.component';
 import { LocalStorageService } from 'angular-2-local-storage';
 
 import { Chords as ChordEngine } from '../../engine/chords';
-import { Fretboard } from '../../engine/fretboard';
+import { Fretboards } from '../../engine/fretboard';
 import { Notes } from '../../engine/note';
 
 class Chord {
@@ -83,7 +83,7 @@ export class ModeGenieComponent implements OnInit {
   }
 
   evaluate(c: Chord) {
-    const fretboard = Fretboard.Fretboard.From('E');
+    const fretboard = Fretboards.Fretboard.From('E');
     const notes = fretboard.asNotes(c.tab);
     const result = ChordEngine.Chord.fromNotes(notes);
     if (result !== undefined) {

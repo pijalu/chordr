@@ -31,10 +31,11 @@
         </button>
       </div>
       <div class="modal-body">
-        <app-chord-input tab="{{tab}}" (onChange)="tabChange($event)"></app-chord-input>
-        <button type="button" class="btn btn-primary pull-right" aria-label="Close" (click)="updateChord(); selectChordModal.hide()">
-           <span aria-hidden="true">confirm</span>
+        <button type="button" class="btn btn-outline-primary btn-lg btn-block" aria-label="Close" (click)="updateChord(); selectChordModal.hide()" [disabled]="!update.tab">
+           <span [hidden]="!update.name" aria-hidden="true" title="confirm">Use chord {{update.name}} {{update.type}} ({{update.tab | tabToNotes}})</span>
+           <span [hidden]="update.name" aria-hidden="true">Please select some notes...</span>
         </button>
+        <app-chord-input tab="{{tab}}" (onChange)="tabChange($event)"></app-chord-input>
       </div>
     </div>
   </div>
