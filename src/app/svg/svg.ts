@@ -2,6 +2,7 @@ export class SvgCircle {
     cookie: any;
     fill = '#000000';
     stroke = '#000';
+    fillOpacity = '1.0';
 
     constructor(public cx: number,
         public cy: number,

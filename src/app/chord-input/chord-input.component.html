@@ -7,15 +7,6 @@
         style="overflow: hidden; position: relative; top: -0.150024px;"
         viewBox="0 0 300 500" 
         preserveAspectRatio="xMinYMin">
-
-        <defs>
-            <pattern id="crossPattern" patternUnits="userSpaceOnUse"
-                    x="0" y="0" width="40" height="40"
-                    viewBox="0 0 10 10" >
-                <path d="M 0 0 L 10 10 M0 10 L10 0" stroke="#000000" fill="none"></path>
-            </pattern> 
-        </defs>
-
         <path *ngFor="let elm of svg.paths" 
             [attr.d]="elm.d"
             [attr.stroke]="elm.stroke"
@@ -41,6 +32,7 @@
             [attr.cy]="elm.cy"
             [attr.r]="elm.r"
             [attr.fill]="elm.fill"
+            [attr.fill-opacity]="elm.fillOpacity"
             [attr.stroke]="elm.stroke"
             (click)="selectCircle(elm.cookie)">
         </circle>

@@ -42,13 +42,15 @@ export class ChordInputComponent implements OnInit {
   chordName: string;
   chordType: string;
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit() {
+    console.log("ngInit with tab", this.tab);
     if (this.tab === undefined
       || this.tab.length < 6) {
       this.tab = '-1,-1,-1,-1,-1,-1';
     }
+    console.log("(post) ngInit with tab", this.tab);
     this.buildSvg();
     this.evaluateTab();
   }
@@ -67,6 +69,7 @@ export class ChordInputComponent implements OnInit {
 
 
   buildSvg() {
+    console.log("build svg with tab", this.tab);
     const svg: Svg = new Svg();
     const circleMap = new Map();
     const playedTab = this.tab2array(this.tab);
@@ -91,6 +94,12 @@ export class ChordInputComponent implements OnInit {
       }
     }
 
+    // Add crosses on top
+    for (let x = 0; x < 6; x++) {
+      svg.addPath(new SvgPath('M' + (12 + (40 * x)) + ' 12L' + (28 + (40 * x)) + ' 28'
+        + ' M' + (12 + (40 * x)) + ' 28L' + (28 + (40 * x)) + ' 12'));
+    }
+
     for (let y = 0; y <= 12; y++) {
       for (let x = 0; x < 6; x++) {
         const positionX = 20 + (40 * x);
@@ -100,7 +109,7 @@ export class ChordInputComponent implements OnInit {
         circle.cookie = new CircleCookie(circleId, y, x);
         if (playedTab[x] === -1 && y === 0) {
           circle.cookie.mutted = true;
-          circle.fill = 'url(#crossPattern)';
+          circle.fillOpacity = '0.0';
         } else if (playedTab[x] === y) {
           circle.cookie.clicked = true;
           circle.fill = '#000000';
@@ -114,9 +123,11 @@ export class ChordInputComponent implements OnInit {
         if (circle.cookie.clicked || circle.cookie.mutted) {
           // Update selection
           this.selectedStringCircle[circle.cookie.string] = circle;
+          console.log("Added to selected strings", circle.cookie);
         }
       }
     }
+
     this.circleMap = circleMap;
     this.svg = svg;
   }
@@ -139,6 +150,7 @@ export class ChordInputComponent implements OnInit {
     if (this.selectedStringCircle[cookie.string] !== undefined
       && this.selectedStringCircle[cookie.string].cookie.id !== cookie.id) {
       const previousSelection = this.selectedStringCircle[cookie.string];
+      previousSelection.fillOpacity = '1.0';
       previousSelection.fill = '#ffffff';
       previousSelection.cookie.clicked = false;
       previousSelection.cookie.mutted = false;
@@ -155,10 +167,12 @@ export class ChordInputComponent implements OnInit {
     this.updateTab();
 
     if (cookie.mutted) {
-      this.circleMap[cookie.id].fill = 'url(#crossPattern)';
+      this.circleMap[cookie.id].fillOpacity = '0.0';
     } else if (cookie.clicked) {
+      this.circleMap[cookie.id].fillOpacity = '1.0';
       this.circleMap[cookie.id].fill = '#000000';
     } else {
+      this.circleMap[cookie.id].fillOpacity = '1.0';
       this.circleMap[cookie.id].fill = '#ffffff';
     }
   }
