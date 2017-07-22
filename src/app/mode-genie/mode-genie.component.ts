@@ -4,8 +4,8 @@ import { ChangeEvent } from '../custom-chord/custom-chord.component';
 import { LocalStorageService } from 'angular-2-local-storage';
 
 import { Chords as ChordEngine } from '../../engine/chords';
-import { Fretboards } from '../../engine/fretboard';
-import { Notes } from '../../engine/note';
+import { Fretboards } from '../../engine/fretboards';
+import { Notes } from '../../engine/notes';
 
 class Chord {
   static ids = 0;

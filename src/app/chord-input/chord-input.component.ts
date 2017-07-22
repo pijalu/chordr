@@ -2,8 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Svg, SvgCircle, SvgPath, SvgText } from '../svg/svg';
 
 import { Chords as ChordEngine } from '../../engine/chords';
-import { Fretboards } from '../../engine/fretboard';
-import { Notes } from '../../engine/note';
+import { Fretboards } from '../../engine/fretboards';
+import { Notes } from '../../engine/notes';
 
 class CircleCookie {
   clicked = false;

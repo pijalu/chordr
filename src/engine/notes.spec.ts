@@ -1,4 +1,4 @@
-import { Notes } from './note';
+import { Notes } from './notes';
 
 import { expect } from 'chai';
 

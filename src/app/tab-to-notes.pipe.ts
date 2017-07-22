@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { Notes } from '../engine/note';
-import { Fretboards } from '../engine/fretboard';
+import { Notes } from '../engine/notes';
+import { Fretboards } from '../engine/fretboards';
 
 @Pipe({
   name: 'tabToNotes'

@@ -1,6 +1,6 @@
 import { Chords } from './chords';
-import { Fretboards } from './fretboard';
-import { Notes } from './note';
+import { Fretboards } from './fretboards';
+import { Notes } from './notes';
 
 import { expect } from 'chai';
 
@@ -50,7 +50,7 @@ describe('Chord class', () => {
             tab: string;
             expectedChord: string;
         }
-
+        
         const testItems: Array<TestItem> = [
             {
                 tuning: 'E',
