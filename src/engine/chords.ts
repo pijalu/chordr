@@ -2,7 +2,7 @@ import { Notes } from './notes';
 
 export namespace Chords {
     // Triad defines a triad chord
-    class Triad {
+    export class Triad {
         constructor(public name: string, public interval: Array<number>) { }
         Notes(root: Notes.Note): Array<Notes.Note> {
             const result: Array<Notes.Note> = [];
@@ -14,7 +14,7 @@ export namespace Chords {
     }
 
     // Triads allows easier Triad handling
-    class Triads {
+    export class Triads {
         private static _triads: Array<Triad> = [
             new Triad('MAJ', [0, 4, 7]),
             new Triad('MIN', [0, 3, 7]),
@@ -101,7 +101,16 @@ export namespace Chords {
             return bestChord;
         }
 
-        private constructor(public root: Notes.Note, public triad: Triad) { }
+        /** Convert a series of chord to a human readable text */
+        public static toString(chords: Array<Chord>) {
+            const result: Array<string> = [];
+            for (const chord of chords) {
+                result.push(chord.NameAndType());
+            }
+            return result.join(',');
+        }
+
+        constructor(public root: Notes.Note, public triad: Triad) { }
 
         /** Get name of chord */
         public Name(): string {

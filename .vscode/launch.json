@@ -5,6 +5,21 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "mocha tests",
+            "type": "node",
+            "protocol": "inspector",
+            "request": "launch",
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "stopOnEntry": false,
+            "args": [
+                "--compilers",
+                "ts:ts-node/register",
+                "--no-timeouts",
+                "${workspaceRoot}/src/engine/*.spec.ts"
+            ],
+            "cwd": "${workspaceRoot}"
+        },
+        {
             "type": "chrome",
             "request": "attach",
             "name": "Attach Karma Chrome",

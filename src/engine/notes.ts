@@ -1,6 +1,6 @@
 export namespace Notes {
     // Actual notes
-    const notes = [
+    const NoteName = [
         'C',
         'C#',
         'D',
@@ -34,7 +34,7 @@ export namespace Notes {
         /** Build a note with optional name param (C is not set) */
         public constructor(name?: string) {
             if (name) {
-                this.semitone = notes.indexOf(name.toUpperCase());
+                this.semitone = NoteName.indexOf(name.toUpperCase());
                 if (this.semitone === -1) {
                     throw new SyntaxError('Unkown note:' + name);
                 }
@@ -53,7 +53,7 @@ export namespace Notes {
 
         /** Get name of the note */
         public name(): string {
-            return notes[this.semitone % notes.length];
+            return NoteName[this.semitone % NoteName.length];
         }
 
         /** return true if the note is an accidental */
@@ -64,9 +64,9 @@ export namespace Notes {
         /** Return a new note distant from the given number of semitones */
         public addSemitones(increment: number): Note {
             const note = new Note();
-            note.semitone = (this.semitone + increment) % notes.length;
+            note.semitone = (this.semitone + increment) % NoteName.length;
             while (note.semitone < 0) {
-                note.semitone += notes.length;
+                note.semitone += NoteName.length;
             }
             return note;
         }

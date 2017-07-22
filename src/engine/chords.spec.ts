@@ -50,7 +50,7 @@ describe('Chord class', () => {
             tab: string;
             expectedChord: string;
         }
-        
+
         const testItems: Array<TestItem> = [
             {
                 tuning: 'E',
