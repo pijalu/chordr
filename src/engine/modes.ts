@@ -2,7 +2,7 @@ import { Notes } from './notes';
 import { Chords } from './chords';
 
 export namespace Modes {
-    /* the traditional modes - most of their values can be calculated based on ionian */
+    /** the traditional modes - most of their values can be calculated based on ionian */
     const defaultModes: Array<string> = [
         'ionian',
         'dorian',
@@ -13,9 +13,12 @@ export namespace Modes {
         'locrian',
     ];
 
+    /** Mode definition */
     export class Mode {
+        /** Semitones distance for the mode */
         semitones: Array<number>;
 
+        /** build a default triads (offset 0: ionian) */
         private static defaultTriads(offset: number): Array<string> {
             const ionianTriads = 'MAJ MIN MIN MAJ MAJ MIN DIM'.split(' ');
             const triads: Array<string> = [];
@@ -25,6 +28,7 @@ export namespace Modes {
             return triads;
         }
 
+        /** Build a default step progression (offset 0: ionian) */
         private static defaultSteps(offset: number): Array<string> {
             const ionianStep = 'W W H W W W H'.split(' ');
             const steps: Array<string> = [];
@@ -34,7 +38,7 @@ export namespace Modes {
             return steps;
         }
 
-        /* Convert step (H, W, WH) to semitones */
+        /** Convert step (H, W, WH) to semitones */
         private static Semitones(steps: Array<string>): Array<number> {
             const result: Array<number> = [];
             for (const step of steps) {
@@ -50,16 +54,19 @@ export namespace Modes {
             return result;
         }
 
+        /** Build a default mode, derived from ionian (by offset) */
         static buildDefaultMode(offset: number): Mode {
             return new Mode(defaultModes[offset],
                 Mode.defaultSteps(offset),
                 Mode.defaultTriads(offset));
         }
 
+        /** Return mode definition based on it's name */
         static fromName(name: string) {
             return ModeMap[name.toLowerCase()];
         }
 
+        /** Build a new instance */
         constructor(
             public name: string,
             public step: Array<string>,
@@ -67,6 +74,7 @@ export namespace Modes {
             this.semitones = Mode.Semitones(step);
         }
 
+        /** Return chords from the mode, based on provided root */
         Chords(root: Notes.Note): Array<Chords.Chord> {
             const chords: Array<Chords.Chord> = [
                 new Chords.Chord(root,
@@ -86,6 +94,7 @@ export namespace Modes {
     /** Helper for tracking note as set */
     interface ModeMap { [k: string]: Mode; }
 
+    /**  Map of all modes */
     const ModeMap = function (): ModeMap {
         const m: ModeMap = {};
         // Default modes
