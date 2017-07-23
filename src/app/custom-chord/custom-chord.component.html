@@ -31,7 +31,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <button type="button" class="btn btn-outline-primary btn-lg btn-block" aria-label="Close" (click)="updateChord(); selectChordModal.hide()" [disabled]="!update.tab">
+        <button type="button" class="btn btn-outline-primary btn-lg btn-block" aria-label="Close" (click)="selectChordModal.hide(); updateChord();" [disabled]="!update.tab">
            <span [hidden]="!update.name" aria-hidden="true" title="confirm">Use chord {{update.name}} {{update.type}} ({{update.tab | tabToNotes}})</span>
            <span [hidden]="update.name" aria-hidden="true">Please select some notes...</span>
         </button>

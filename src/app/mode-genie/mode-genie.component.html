@@ -5,7 +5,14 @@
     <app-custom-chord [id]="chord.id" name="≈{{chord.name}} {{chord.type}}" [tab]="chord.tab" (onChange)="onChange($event)"></app-custom-chord>
 </div>
 
-<div class="mt-4" [hidden]="!progressions || progressions.length === 0">
+
+<div class="mt-4" [hidden]="!calculating">
+    <div class="alert alert-info">
+        <i class="fa fa-circle-o-notch fa-spin"></i> calculating
+    </div>
+</div>
+
+<div class="mt-4" [hidden]="calculating || !progressions || progressions.length === 0">
     <h4>Found {{progressions.length}} progression(s): </h4>
     <div class="mt-2" *ngFor="let progression of progressions">
         <hr class="half-rule"/>
@@ -16,7 +23,8 @@
     </div>
 </div>
 
-<div class="mt-4" [hidden]="progressions.length !== 0">
+
+<div class="mt-4" [hidden]="calculating || progressions.length !== 0">
     <div class="alert alert-warning">
         No matching progressions found!
     </div>

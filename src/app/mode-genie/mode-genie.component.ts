@@ -42,6 +42,7 @@ const chordsStorageKey = 'ModeGenieComponent_chords';
 export class ModeGenieComponent implements OnInit {
   public chords: Array<Chord> = [];
   public progressions: Array<OutputProgression> = [];
+  public calculating = false;
 
   constructor(private localStorageService: LocalStorageService, private chordService: ChordService) {
     this.chords = localStorageService.get(chordsStorageKey);
@@ -79,18 +80,20 @@ export class ModeGenieComponent implements OnInit {
     if (event.removed) {
       this.chords = this.chords.filter(c => c.id !== event.id);
     } else {
-      for (const chord of this.chords) {
-        if (chord.id === event.id) {
-          if (chord.numericId === Chord.ids - 1) {
-            this.chords.push(new Chord());
-          }
-          chord.tab = event.tab;
-          try {
-            this.evaluate(chord);
-          } catch (e) {
-            console.log('Error during evaluation', e);
-          }
-        }
+      const chord = this.chords.find((c) => c.id === event.id);
+      if (!chord) {
+        console.error('Could not find chord !', chord);
+        return;
+      }
+
+      if (chord.numericId === Chord.ids - 1) {
+        this.chords.push(new Chord());
+      }
+      chord.tab = event.tab;
+      try {
+        this.evaluate(chord);
+      } catch (e) {
+        console.error('Evaluation error', e);
       }
     }
     this.localStorageService.set(chordsStorageKey, this.chords);
@@ -108,11 +111,16 @@ export class ModeGenieComponent implements OnInit {
   }
 
   calculateProgressions() {
-    console.log('Start calculating...');
-    this.progressions = ProgressionGenie.build(
-      // Remove blank (new) chord
-      this.chords.filter((c) => c.name !== undefined));
-    console.log('Done calculating: found ' + this.progressions.length + ' progression(s)');
+    this.calculating = true;
+    // Perform calc in a timeout to allow UI update/smother feelings
+    setTimeout(() => {
+      console.log('Start calculating...');
+      this.progressions = ProgressionGenie.build(
+        // Remove blank (new) chord
+        this.chords.filter((c) => c.name !== undefined));
+      console.log('Done calculating: found ' + this.progressions.length + ' progression(s)');
+      this.calculating = false;
+    }, 500);
   }
 
   tabify(chord: OutputChord): string {
