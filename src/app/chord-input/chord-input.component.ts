@@ -140,13 +140,15 @@ export class ChordInputComponent implements OnInit, OnChanges {
       if (cookie.clicked) {
         cookie.mutted = true;
         cookie.clicked = false;
-      } else if (cookie.mutted) {
-        cookie.mutted = false;
       } else {
+        cookie.mutted = false;
         cookie.clicked = true;
       }
+    } else if (cookie.clicked) {
+      // We don't allow reclick
+      return;
     } else {
-      cookie.clicked = !cookie.clicked;
+      cookie.clicked = true;
     }
 
     // unselect previous selection if it's another circle
@@ -163,11 +165,12 @@ export class ChordInputComponent implements OnInit, OnChanges {
     if (cookie.clicked || cookie.mutted) {
       // Update selection
       this.selectedStringCircle[cookie.string] = this.circleMap[cookie.id];
+      this.updateTab();
     } else {
       // Reset
       this.selectedStringCircle[cookie.string] = undefined;
     }
-    this.updateTab();
+
 
     if (cookie.mutted) {
       this.circleMap[cookie.id].fillOpacity = '0.0';
