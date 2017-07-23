@@ -8,7 +8,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { AboutComponent } from './about/about.component';
 import { MainComponent } from './main/main.component';
 
-import { AppRoutes} from './app.routes';
+import { AppRoutes } from './app.routes';
 import { ChordInputComponent } from './chord-input/chord-input.component';
 import { ChordComponent } from './chord/chord.component';
 
@@ -47,11 +47,11 @@ import { ChordExplorerComponent } from './chord-explorer/chord-explorer.componen
   imports: [
     BrowserModule,
     FormsModule,
-    RouterModule.forRoot(AppRoutes),
+    RouterModule.forRoot(AppRoutes, { useHash: true }),
     ModalModule.forRoot(),
     LocalStorageModule.withConfig({
-            prefix: 'chordr-app',
-            storageType: 'localStorage'
+      prefix: 'chordr-app',
+      storageType: 'localStorage'
     })
   ],
   providers: [],
