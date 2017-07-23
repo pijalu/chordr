@@ -1,4 +1,5 @@
 import { Component, OnInit , OnChanges} from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { LocalStorageService } from 'angular-2-local-storage';
 
@@ -46,18 +47,38 @@ export class ModeExplorerComponent implements OnInit, OnChanges {
   selectedRoot: string;
   selectedMode: string;
 
-  constructor(private localStorageService: LocalStorageService, private chordService: ChordService) {
+  constructor(private localStorageService: LocalStorageService,
+    private chordService: ChordService,
+    private route: ActivatedRoute,
+    private router: Router) {
+
     this.selectedRoot = this.localStorageService.get(rootStorageKey);
     this.selectedMode = this.localStorageService.get(modeStorageKey);
     this.chords = this.localStorageService.get(chordsStorageKey);
   }
 
+  loadQueryParams() {
+    const queryRoot = this.route.snapshot.queryParams['root'];
+    const queryMode = this.route.snapshot.queryParams['mode'];
+
+    console.log('query param', queryRoot, queryMode);
+
+    if (queryRoot !== undefined && queryMode !== undefined
+      && (queryRoot !== this.selectedRoot || queryMode !== this.selectedMode)) {
+      this.selectedRoot = queryRoot;
+      this.selectedMode = queryMode;
+
+      this.localStorageService.set(rootStorageKey, this.selectedRoot);
+      this.localStorageService.set(modeStorageKey, this.selectedMode);
+      this.buildChordList();
+    }
+  }
+
   ngOnInit() {
-    console.log('Root', this.selectedRoot, 'Mode', this.selectedMode);
+    this.loadQueryParams();
   }
 
   ngOnChanges() {
-    console.log('Root', this.selectedRoot, 'Mode', this.selectedMode);
   }
 
   Roots(): Array<string> {
