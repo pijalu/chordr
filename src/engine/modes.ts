@@ -19,7 +19,7 @@ export namespace Modes {
         semitones: Array<number>;
 
         /** build a default triads (offset 0: ionian) */
-        private static defaultTriads(offset: number): Array<string> {
+        public static defaultTriads(offset: number): Array<string> {
             const ionianTriads = 'MAJ MIN MIN MAJ MAJ MIN DIM'.split(' ');
             const triads: Array<string> = [];
             for (let i = 0; i < ionianTriads.length; i++) {
@@ -29,7 +29,7 @@ export namespace Modes {
         }
 
         /** Build a default step progression (offset 0: ionian) */
-        private static defaultSteps(offset: number): Array<string> {
+        public static defaultSteps(offset: number): Array<string> {
             const ionianStep = 'W W H W W W H'.split(' ');
             const steps: Array<string> = [];
             for (let i = 0; i < ionianStep.length; i++) {
@@ -39,7 +39,7 @@ export namespace Modes {
         }
 
         /** Convert step (H, W, WH) to semitones */
-        private static Semitones(steps: Array<string>): Array<number> {
+        public static Semitones(steps: Array<string>): Array<number> {
             const result: Array<number> = [];
             for (const step of steps) {
                 let inc = 0;
@@ -105,7 +105,7 @@ export namespace Modes {
     interface ModeMap { [k: string]: Mode; }
 
     /**  Map of all modes */
-    const ModeMap = function (): ModeMap {
+    export const ModeMap = function (): ModeMap {
         const m: ModeMap = {};
         // Default modes
         for (let i = 0; i < TraditionalModes.length; ++i) {

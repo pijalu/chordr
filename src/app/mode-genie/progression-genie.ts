@@ -26,6 +26,8 @@ export class OutputProgression {
     }
 }
 
+const traditionalModeSteps = Modes.Mode.Semitones(Modes.Mode.defaultSteps(0));
+
 /** Store precalculate proggression information */
 class ProgressionData {
     root: Notes.Note;
@@ -65,7 +67,10 @@ export class ProgressionGenie {
             this.progressionData = [];
             for (const root of Notes.NoteName) {
                 for (const mode of Modes.Mode.Names()) {
-                    this.progressionData.push(new ProgressionData(root, mode));
+                    // Don't select tradional derived mode - we know they will match
+                    if (!Modes.Mode.fromName(mode).traditionalDerived) {
+                        this.progressionData.push(new ProgressionData(root, mode));
+                    }
                 }
             }
             console.log('Done building Initial calculation data');
@@ -81,9 +86,9 @@ export class ProgressionGenie {
         const results: Array<OutputProgression> = [];
         for (const data of this.getCalculationData()) {
             for (const progression of ProgressionGenie.buildByProgressionData(
-                    data,
-                    chords)) {
-                    results.push(progression);
+                data,
+                chords)) {
+                results.push(progression);
             }
         }
         return results;
@@ -124,6 +129,19 @@ export class ProgressionGenie {
         return result;
     }
 
+    private static reorderChordsForTraditionalDerivedMode(chords: Array<OutputChord>, offset: number): Array<OutputChord> {
+        const result: Array<OutputChord> = [];
+        for (let i = 0; i < chords.length; i++) {
+            const chord = chords[(i + offset) % chords.length];
+            result.push(new OutputChord(
+                chord.name,
+                chord.type,
+                Progressions.Progression.NumeralByValueAndTriad(i + 1, chord.type),
+                chord.played));
+        }
+        return result;
+    }
+
     /** Check and build a proposal based on a root/mode precalculated data */
     private static buildByProgressionData(data: ProgressionData, chords: Array<InputChord>): Array<OutputProgression> {
         // If we don't match all the input chord, we can stop now
@@ -133,14 +151,33 @@ export class ProgressionGenie {
             return [];
         }
 
+        const progressionChords = ProgressionGenie.buildOutputChordsFromModeChords(
+            data.chords,
+            chords);
+        const progression = new OutputProgression(
+            data.rootName,
+            data.modeName,
+            progressionChords);
+
         const results: Array<OutputProgression> = [
-            new OutputProgression(
-                data.rootName,
-                data.modeName,
-                ProgressionGenie.buildOutputChordsFromModeChords(
-                    data.chords,
-                    chords))
+            progression
         ];
+
+        // We are in a traditional ionian: we can add all derived modes
+        if (data.mode.traditional
+            && data.mode.name === Modes.TraditionalModes[0]) {
+
+            for (let offset = 1, semitones = traditionalModeSteps[offset - 1];
+                offset < Modes.TraditionalModes.length;
+                offset++ , semitones += traditionalModeSteps[offset - 1]) {
+                results.push(
+                    new OutputProgression(
+                        data.root.addSemitones(semitones).name(),
+                        Modes.TraditionalModes[offset],
+                        this.reorderChordsForTraditionalDerivedMode(progressionChords, offset)));
+            }
+        }
+
         // TODO: More calc !
         return results;
     }
