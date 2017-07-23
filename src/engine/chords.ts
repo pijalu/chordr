@@ -110,7 +110,7 @@ export namespace Chords {
             return result.join(',');
         }
 
-        constructor(public root: Notes.Note, public triad: Triad) { }
+        constructor(public root: Notes.Note, public triad: Triad, public numeralInProgression?: number) { }
 
         /** Get name of chord */
         public Name(): string {

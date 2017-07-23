@@ -90,7 +90,8 @@ export namespace Modes {
                 chords.push(
                     new Chords.Chord(
                         root.addSemitones(inc),
-                        Chords.Triads.byName(this.triads[i])));
+                        Chords.Triads.byName(this.triads[i]),
+                        i));
             }
             return chords;
         }

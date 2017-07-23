@@ -21,3 +21,8 @@ div:hover.chord-component-new {
 .button-remove {
     color: red;
 }
+
+.btn{
+    white-space:normal !important;
+    word-wrap: break-word; 
+}

@@ -55,6 +55,10 @@ export class ModeGenieComponent implements OnInit {
       }
     });
 
+    // Precalculate data now
+    ProgressionGenie.preCalculate();
+
+    // Calculate if we have restored data
     if (this.chords.length > 0) {
       this.calculateProgressions();
     }
@@ -107,11 +111,11 @@ export class ModeGenieComponent implements OnInit {
     console.log('Start calculating...');
     this.progressions = ProgressionGenie.build(
       // Remove blank (new) chord
-      this.chords.filter((c) => c.name !== undefined ));
+      this.chords.filter((c) => c.name !== undefined));
     console.log('Done calculating: found ' + this.progressions.length + ' progression(s)');
   }
 
-  tabify(chord: OutputChord): string {    
+  tabify(chord: OutputChord): string {
     return this.chordService.Variations(chord.name, chord.type.toLowerCase(), 0).join(',');
   }
 }
