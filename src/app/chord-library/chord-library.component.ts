@@ -57,7 +57,6 @@ export class ChordLibraryComponent implements OnInit {
   }
 
   onChange(evt: ChangeEvent) {
-    console.log('chord lib', 'onChange', evt);
     if (evt.removed) {
       this.chords = this.chords.filter(c => c.id !== evt.id);
     } else {

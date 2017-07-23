@@ -60,8 +60,6 @@ export class ModeExplorerComponent implements OnInit, OnChanges {
     const queryRoot = this.route.snapshot.queryParams['root'];
     const queryMode = this.route.snapshot.queryParams['mode'];
 
-    console.log('query param', queryRoot, queryMode);
-
     if (queryRoot !== undefined && queryMode !== undefined
       && (queryRoot !== this.selectedRoot || queryMode !== this.selectedMode)) {
       this.selectedRoot = queryRoot;
