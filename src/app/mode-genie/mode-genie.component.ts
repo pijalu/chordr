@@ -7,7 +7,11 @@ import { Chords as ChordEngine } from '../../engine/chords';
 import { Fretboards } from '../../engine/fretboards';
 import { Notes } from '../../engine/notes';
 
-class Chord {
+import { OutputChord, OutputProgression, ProgressionGenie } from './progression-genie';
+
+import { ChordService } from '../chord.service';
+
+export class Chord {
   static ids = 0;
 
   id: string;
@@ -32,12 +36,14 @@ const chordsStorageKey = 'ModeGenieComponent_chords';
 @Component({
   selector: 'app-mode-genie',
   templateUrl: './mode-genie.component.html',
-  styleUrls: ['./mode-genie.component.css']
+  styleUrls: ['./mode-genie.component.css'],
+  providers: [ChordService]
 })
 export class ModeGenieComponent implements OnInit {
   public chords: Array<Chord> = [];
+  public progressions: Array<OutputProgression> = [];
 
-  constructor(private localStorageService: LocalStorageService) {
+  constructor(private localStorageService: LocalStorageService, private chordService: ChordService) {
     this.chords = localStorageService.get(chordsStorageKey);
     if (this.chords === null) {
       this.clear();
@@ -48,6 +54,10 @@ export class ModeGenieComponent implements OnInit {
         Chord.ids = c.numericId + 1;
       }
     });
+
+    if (this.chords.length > 0) {
+      this.calculateProgressions();
+    }
   }
 
   clear() {
@@ -80,6 +90,7 @@ export class ModeGenieComponent implements OnInit {
       }
     }
     this.localStorageService.set(chordsStorageKey, this.chords);
+    this.calculateProgressions();
   }
 
   evaluate(c: Chord) {
@@ -90,5 +101,17 @@ export class ModeGenieComponent implements OnInit {
       c.name = result.Name();
       c.type = result.Type().toLowerCase();
     }
+  }
+
+  calculateProgressions() {
+    console.log('Start calculating...');
+    this.progressions = ProgressionGenie.build(
+      // Remove blank (new) chord
+      this.chords.filter((c) => c.name !== undefined ));
+    console.log('Done calculating: found ' + this.progressions.length + ' progression(s)');
+  }
+
+  tabify(chord: OutputChord): string {    
+    return this.chordService.Variations(chord.name, chord.type.toLowerCase(), 0).join(',');
   }
 }

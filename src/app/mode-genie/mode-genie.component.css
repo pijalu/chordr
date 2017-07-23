@@ -21,3 +21,10 @@ div:hover.chord-component-new {
 .button-remove {
     color: red;
 }
+
+div.played {
+    background: #ffffed;
+    border-radius: 10px;
+    border: 2px dotted #aaaaaa;
+    padding: 0px; 
+}

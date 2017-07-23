@@ -5,6 +5,14 @@ import { Notes } from './notes';
 import { expect } from 'chai';
 
 describe('Mode class', () => {
+    it('should contains ionian mode within names', () => {
+        const modeName = 'ionian';
+        const name = Modes.Mode.Names().find((n) => {
+            return n === modeName;
+        });
+        expect(name).to.equal(modeName);
+    });
+
     it('should contains ionian mode', () => {
         const modeName = 'ionian';
         const mode = Modes.Mode.fromName(modeName.toUpperCase());

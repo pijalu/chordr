@@ -66,6 +66,11 @@ export namespace Modes {
             return ModeMap[name.toLowerCase()];
         }
 
+        /** Return list of supported modes */
+        static Names() {
+            return Object.keys(ModeMap);
+        }
+
         /** Build a new instance */
         constructor(
             public name: string,

@@ -1,6 +1,6 @@
 export namespace Notes {
     // Actual notes
-    const NoteName = [
+    export const NoteName = [
         'C',
         'C#',
         'D',

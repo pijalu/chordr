@@ -7,7 +7,7 @@ export namespace Progressions {
         AUG
     }
 
-    const romanNumeral = [
+    const RomanNumeral = [
         '',
         'I',
         'II',
@@ -25,22 +25,32 @@ export namespace Progressions {
         progressionAsNumber: Array<number> = [];
         triads: Array<string> = [];
 
+        /** Convert a progression number to matching numeral */
+        static NumeralByValueAndTriad(value: number, triad: string): string {
+            const numeral = RomanNumeral[value];
+            if (triad === triadType[triadType.MIN]) {
+                return numeral.toLowerCase();
+            }
+            // def to maj
+            return numeral.toUpperCase();
+        }
+
         /** Build a progression based on a string */
         constructor(progression: string) {
             this.progressionAsString = progression;
             for (const number of this.progressionAsString.split(/\ |,/)) {
                 let i = 1;
-                for (; i < romanNumeral.length && romanNumeral[i].toLowerCase() !== number.toLowerCase(); ++i) {
+                for (; i < RomanNumeral.length && RomanNumeral[i].toLowerCase() !== number.toLowerCase(); ++i) {
                     // No action
                 }
-                if (i > romanNumeral.length) {
+                if (i > RomanNumeral.length) {
                     throw new Error('Could not convert ' + number + ' from ' + progression);
                 }
                 this.progressionAsNumber.push(i);
                 // Only major/minor for now: roman are uppercase - if match => major
-                if (number === romanNumeral[i]) {
+                if (number === RomanNumeral[i]) {
                     this.triads.push(triadType[triadType.MAJ]);
-                } else if (number === romanNumeral[i].toLowerCase()) {
+                } else if (number === RomanNumeral[i].toLowerCase()) {
                     this.triads.push(triadType[triadType.MIN]);
                 } else {
                     this.triads.push(undefined);

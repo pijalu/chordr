@@ -30,4 +30,43 @@ describe('Progressions classes', () => {
         });
         expect(progression.triads).to.be.deep.equal(['MAJ', 'MAJ', 'MIN', 'MAJ']);
     });
+
+    const numeralTests = (() => {
+        interface TestItem {
+            inputNumber: number;
+            inputTriad: string;
+            expectedOutput: string;
+        }
+
+        const testItems: Array<TestItem> = [
+            {
+                inputNumber: 1,
+                inputTriad: 'MAJ',
+                expectedOutput: 'I',
+            },
+            {
+                inputNumber: 1,
+                inputTriad: 'MIN',
+                expectedOutput: 'i',
+            },
+            {
+                inputNumber: 7,
+                inputTriad: 'MIN',
+                expectedOutput: 'vii',
+            },
+            {
+                inputNumber: 7,
+                inputTriad: 'DIM',
+                expectedOutput: 'VII',
+            },
+        ];
+        for (const testItem of testItems) {
+            it('returns numeral ' + testItem.expectedOutput
+                + ' for chord ' + testItem.inputNumber
+                + ' triad ' + testItem.inputTriad, () => {
+                const actual = Progressions.Progression.NumeralByValueAndTriad(testItem.inputNumber, testItem.inputTriad);
+                expect(actual).to.be.equal(testItem.expectedOutput);
+            });
+        }
+    })();
 });
