@@ -83,7 +83,7 @@ export namespace Modes {
         Chords(root: Notes.Note): Array<Chords.Chord> {
             const chords: Array<Chords.Chord> = [
                 new Chords.Chord(root,
-                    Chords.Triads.byName(this.triads[0]))
+                    Chords.Triads.byName(this.triads[0]), 1)
             ];
             for (let i = 1, inc = 0; i < this.semitones.length; ++i) {
                 inc += this.semitones[i - 1];
@@ -91,7 +91,7 @@ export namespace Modes {
                     new Chords.Chord(
                         root.addSemitones(inc),
                         Chords.Triads.byName(this.triads[i]),
-                        i));
+                        i + 1));
             }
             return chords;
         }

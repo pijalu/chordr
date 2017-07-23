@@ -1,3 +1,23 @@
-<p>
-  mode-explorer works!
-</p>
+<app-dismissable-alert key="modeExplorer" title="Mode Explorer" text=" lets you select a root, a mode and allows you to explore chords variations">
+</app-dismissable-alert>
+
+<div class="modeSelection">
+  <label for="rootSelect">Root:</label>
+  <select id="rootSelect" type="string" [(ngModel)]="selectedRoot" (ngModelChange)="onRootChange($event)">
+    <option *ngFor="let root of Roots()" [value]="root">{{root}}</option>
+  </select>
+  <label for="modeSelect">Mode:</label>
+  <select id="modeSelect" type="string" [(ngModel)]="selectedMode" (ngModelChange)="onModeChange($event)">
+    <option *ngFor="let mode of Modes()" [value]="mode">{{mode}}</option>
+  </select>
+</div>
+<div class="chord-component" *ngFor="let chord of chords" [class.played]='chord.played' (click)='editChord(chord)'>
+  <app-chord-box label="{{chord.numeral}}. {{chord.name}} {{chord.type.toLowerCase()}}" [tab]='tabify(chord)'></app-chord-box>
+</div>
+
+
+<div class="mt-4" [hidden]="selectedRoot && selectedMode">
+  <div class="alert alert-warning">
+    Select a root note and a mode
+  </div>
+</div>

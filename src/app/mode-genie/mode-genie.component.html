@@ -18,7 +18,7 @@
         <hr class="half-rule"/>
         <h5>{{progression.root}} {{progression.modeName}}</h5>        
         <div class="chord-component" *ngFor="let chord of progression.chords" [class.played]='chord.played' (click)='addChord(chord)'>
-            <app-chord-box label="{{chord.numeral}}. {{chord.name}} {{chord.type}}" [tab]='tabify(chord)'></app-chord-box>
+            <app-chord-box label="{{chord.numeral}}. {{chord.name}} {{chord.type.toLowerCase()}}" [tab]='tabify(chord)'></app-chord-box>
         </div>
     </div>
 </div>
