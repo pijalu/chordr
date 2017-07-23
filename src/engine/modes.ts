@@ -3,7 +3,7 @@ import { Chords } from './chords';
 
 export namespace Modes {
     /** the traditional modes - most of their values can be calculated based on ionian */
-    const defaultModes: Array<string> = [
+    export const TraditionalModes: Array<string> = [
         'ionian',
         'dorian',
         'phrygian',
@@ -56,9 +56,11 @@ export namespace Modes {
 
         /** Build a default mode, derived from ionian (by offset) */
         static buildDefaultMode(offset: number): Mode {
-            return new Mode(defaultModes[offset],
+            return new Mode(TraditionalModes[offset],
                 Mode.defaultSteps(offset),
-                Mode.defaultTriads(offset));
+                Mode.defaultTriads(offset),
+                true,
+                offset !== 0);
         }
 
         /** Return mode definition based on it's name */
@@ -75,7 +77,9 @@ export namespace Modes {
         constructor(
             public name: string,
             public step: Array<string>,
-            public triads: Array<string>) {
+            public triads: Array<string>,
+            public traditional?: boolean,
+            public traditionalDerived?: boolean) {
             this.semitones = Mode.Semitones(step);
         }
 
@@ -104,8 +108,8 @@ export namespace Modes {
     const ModeMap = function (): ModeMap {
         const m: ModeMap = {};
         // Default modes
-        for (let i = 0; i < defaultModes.length; ++i) {
-            m[defaultModes[i]] = Mode.buildDefaultMode(i);
+        for (let i = 0; i < TraditionalModes.length; ++i) {
+            m[TraditionalModes[i]] = Mode.buildDefaultMode(i);
         }
         // Melodic Minor
         m['melodic'] = new Mode('melodic',
