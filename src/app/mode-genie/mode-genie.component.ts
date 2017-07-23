@@ -137,7 +137,7 @@ export class ModeGenieComponent implements OnInit {
       return;
     }
     const emptyChord = this.chords[this.chords.length - 1];
-    emptyChord.tab=this.tabify(chord);
+    emptyChord.tab = this.tabify(chord);
 
     this.onChange(new ChangeEvent(emptyChord.id,
       emptyChord.tab,

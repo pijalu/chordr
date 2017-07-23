@@ -12,18 +12,17 @@ import { Notes } from '../../engine/notes';
 
 import { ChordService } from '../chord.service';
 
-class Chord {
+export class Chord {
   static ids = 0;
 
   id: string;
   numericId: number;
-  tab: string;
 
   static reset() {
     Chord.ids = 0;
   }
 
-  constructor(public name: string, public type: string, public variation: number, public numeral: string) {
+  constructor(public name: string, public type: string, public variation: number, public tab: string, public numeral: string) {
     this.id = 'chord_' + Chord.ids;
     this.numericId = Chord.ids;
     Chord.ids++;
@@ -99,9 +98,9 @@ export class ModeExplorerComponent implements OnInit, OnChanges {
     this.buildChordList();
   }
 
-  /** convert a progression entry to a chord */
-  tabify(chord: Chord): string {
-    return this.chordService.Variations(chord.name, chord.type.toLowerCase(), 0).join(',');
+  onChordChange(chord: Chord) {
+    // Store chord update
+    this.localStorageService.set(chordsStorageKey, this.chords);
   }
 
   buildChordList() {
@@ -120,6 +119,7 @@ export class ModeExplorerComponent implements OnInit, OnChanges {
           chord.Name(),
           chord.Type(),
           0,
+          this.chordService.Variations(chord.Name(), chord.Type().toLowerCase(), 0).join(','),
           Progressions.Progression.NumeralByValueAndTriad(
             chord.numeralInProgression,
             chord.Type())));

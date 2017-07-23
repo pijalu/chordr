@@ -1,0 +1,35 @@
+<div class="chord-component unselectable">
+    <app-chord-box label="{{chord.numeral}}. {{chord.name}} {{chord.type.toLowerCase()}}" 
+      tab="{{chord.tab}}" 
+      (click)="selectChordModal.show()" 
+      title="{{chord.name}} {{chord.type}} variation {{chord.variation}}"></app-chord-box>        
+</div>
+
+<!-- Select chord dialog -->
+<div class="modal" bsModal #selectChordModal="bs-modal" tabindex="-1" role="dialog" aria-labelledby="selectChordlModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title pull-left">Select chord variation</h5>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="selectChordModal.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <label for="typeSelect">type:</label>
+                    <select id="typeSelect" type="string" [(ngModel)]="type" (ngModelChange)="onTypeChange($event)">
+                        <option *ngFor="let type of Types()" [value]="type">{{type}}</option>
+                    </select>
+                </div>
+                <div *ngFor="let variation of variations" class="chord-component">
+                    <app-chord-box label="{{variation.name}} {{variation.type}} variation {{variation.variation}}" 
+                      tab="{{variation.tab}}"  
+                      (click)="selectChordModal.hide(); selectChord(variation)">
+                    </app-chord-box>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -24,6 +24,7 @@ import { DismissableAlertComponent } from './dismissable-alert/dismissable-alert
 import { TabPipe } from './tab.pipe';
 import { CustomChordComponent } from './custom-chord/custom-chord.component';
 import { TabToNotesPipe } from './tab-to-notes.pipe';
+import { ChordExplorerComponent } from './chord-explorer/chord-explorer.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { TabToNotesPipe } from './tab-to-notes.pipe';
     DismissableAlertComponent,
     TabPipe,
     CustomChordComponent,
-    TabToNotesPipe
+    TabToNotesPipe,
+    ChordExplorerComponent
   ],
   imports: [
     BrowserModule,

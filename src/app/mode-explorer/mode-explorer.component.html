@@ -11,8 +11,8 @@
     <option *ngFor="let mode of Modes()" [value]="mode">{{mode}}</option>
   </select>
 </div>
-<div class="chord-component" *ngFor="let chord of chords" [class.played]='chord.played' (click)='editChord(chord)'>
-  <app-chord-box label="{{chord.numeral}}. {{chord.name}} {{chord.type.toLowerCase()}}" [tab]='tabify(chord)'></app-chord-box>
+<div class="chord-component" *ngFor="let chord of chords">
+  <app-chord-explorer [chord]="chord" (onChange)="onChordChange($event)"></app-chord-explorer>
 </div>
 
 
