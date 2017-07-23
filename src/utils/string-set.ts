@@ -1,32 +1,17 @@
+import { StringMap } from './string-map';
 /** Helper for tracking note as set */
 interface SetItem { [k: string]: boolean; }
 
 /** Simple string set */
-export class StringSet {
-    private data: SetItem = {};
-    constructor() { }
+export class StringSet extends StringMap<boolean> {
+    constructor() { super(); }
 
     /** Add value to set */
     add(value: string) {
-        this.data[value] = true;
+        this.put(value, true);
     }
-
-    /** Remove */
-    remove(value: string) {
-        delete this.data[value];
-    }
-
-    /** Check if an element exists */
-    exists(value: string): boolean {
-        return this.data[value] !== undefined;
-    }
-
-    /** Return number of elm */
-    size(): number {
-        return Object.keys(this.data).length;
-    }
-
+    
     toString(): string {
-        return '{' + Object.keys(this.data).join(',') + '}';
+        return '{' + this.keys().join(',') + '}';
     }
 }

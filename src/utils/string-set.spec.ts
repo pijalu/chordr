@@ -4,13 +4,13 @@ import { expect } from 'chai';
 describe('StringSet', () => {
     it('exits return false when items does not exits', () => {
         const set = new StringSet();
-        expect(set.exists('k1')).to.be.equal(false);
+        expect(set.contains('k1')).to.be.equal(false);
     });
 
     it('exits return true when items exits', () => {
         const set = new StringSet();
         set.add('k1');
-        expect(set.exists('k1')).to.be.equal(true);
+        expect(set.contains('k1')).to.be.equal(true);
     });
 
     it('exits return 0 when empty', () => {
@@ -29,7 +29,7 @@ describe('StringSet', () => {
         set.add('one');
         set.remove('one');
 
-        expect(set.exists('one')).to.be.equal(false);
+        expect(set.contains('one')).to.be.equal(false);
         expect(set.size()).to.be.equal(0);
     });
 });

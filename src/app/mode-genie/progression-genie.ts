@@ -5,6 +5,7 @@ import { Modes } from '../../engine/modes';
 import { Chords } from '../../engine/chords';
 import { Notes } from '../../engine/notes';
 import { StringSet } from '../../utils/string-set';
+import { StringMap } from '../../utils/string-map';
 
 import { Chord as InputChord } from './mode-genie.component';
 
@@ -15,8 +16,9 @@ export class OutputChord {
 
 /** Resulting progression */
 export class OutputProgression {
-    score: number;
+    score = 0;
     type: string;
+    progressionName: string;
     chords: Array<OutputChord> = [];
 
     constructor(public root: string, public modeName: string, chords?: Array<OutputChord>) {
@@ -93,7 +95,8 @@ export class ProgressionGenie {
         }
         return results.sort((a, b) => {
             if (a.score !== b.score) {
-                return a.score - b.score;
+                // inverse
+                return b.score - a.score;
             }
             const strA = a.root + a.modeName;
             const strB = b.root + b.modeName;
@@ -104,14 +107,14 @@ export class ProgressionGenie {
             }
             return 0;
         });
-}
+    }
 
     /** Count matches from the proposed progression chords */
     private static countMatches(progressionChords: StringSet,
-    inputChords: Array<InputChord>): number {
+        inputChords: Array<InputChord>): number {
         let matches = 0;
-        for(const chord of inputChords) {
-            if (progressionChords.exists((chord.name + ' ' + chord.type).toUpperCase())) {
+        for (const chord of inputChords) {
+            if (progressionChords.contains((chord.name + ' ' + chord.type).toUpperCase())) {
                 matches++;
             }
         }
@@ -119,78 +122,115 @@ export class ProgressionGenie {
     }
 
     /** Transform mode chords */
-    private static buildOutputChordsFromModeChords(chords: Array < Chords.Chord >, inputChords: Array<InputChord>): Array < OutputChord > {
+    private static buildOutputChordsFromModeChords(chords: Array<Chords.Chord>, inputChords: Array<InputChord>): Array<OutputChord> {
         const result: Array<OutputChord> = [];
 
         const noteSet = new StringSet();
-        for(const chord of inputChords) {
+        for (const chord of inputChords) {
             noteSet.add((chord.name + ' ' + chord.type).toUpperCase());
         }
 
         let i = 1;
-        for(const chord of chords) {
+        for (const chord of chords) {
             const oc = new OutputChord(
                 chord.Name(),
                 chord.Type(),
                 Progressions.Progression.NumeralByValueAndTriad(i,
                     chord.Type()),
-                noteSet.exists((chord.Name() + ' ' + chord.Type()).toUpperCase()));
+                noteSet.contains((chord.Name() + ' ' + chord.Type()).toUpperCase()));
             i++;
             result.push(oc);
         }
         return result;
     }
 
-    private static reorderChordsForTraditionalDerivedMode(chords: Array < OutputChord >, offset: number): Array < OutputChord > {
-            const result: Array<OutputChord> = [];
-            for(let i = 0; i <chords.length; i++) {
-        const chord = chords[(i + offset) % chords.length];
-        result.push(new OutputChord(
-            chord.name,
-            chord.type,
-            Progressions.Progression.NumeralByValueAndTriad(i + 1, chord.type),
-            chord.played));
-    }
+    private static reorderChordsForTraditionalDerivedMode(chords: Array<OutputChord>, offset: number): Array<OutputChord> {
+        const result: Array<OutputChord> = [];
+        for (let i = 0; i < chords.length; i++) {
+            const chord = chords[(i + offset) % chords.length];
+            result.push(new OutputChord(
+                chord.name,
+                chord.type,
+                Progressions.Progression.NumeralByValueAndTriad(i + 1, chord.type),
+                chord.played));
+        }
         return result;
     }
 
     /** Check and build a proposal based on a root/mode precalculated data */
-    private static buildByProgressionData(data: ProgressionData, chords: Array<InputChord>): Array < OutputProgression > {
-    // If we don't match all the input chord, we can stop now
-    const matches = ProgressionGenie.countMatches(data.chordsSet, chords);
-    if(matches < chords.length) {
-        // console.log('Short cut', data.rootName, data.modeName, matches, data.chordsSet, chords);
-        return [];
-    }
+    private static buildByProgressionData(data: ProgressionData, chords: Array<InputChord>): Array<OutputProgression> {
+        // If we don't match all the input chord, we can stop now
+        const matches = ProgressionGenie.countMatches(data.chordsSet, chords);
+        if (matches < chords.length) {
+            // console.log('Short cut', data.rootName, data.modeName, matches, data.chordsSet, chords);
+            return [];
+        }
 
         const progressionChords = ProgressionGenie.buildOutputChordsFromModeChords(
-        data.chords,
-        chords);
-    const progression = new OutputProgression(
-        data.rootName,
-        data.modeName,
-        progressionChords);
+            data.chords,
+            chords);
+        const progression = new OutputProgression(
+            data.rootName,
+            data.modeName,
+            progressionChords);
 
-    const results: Array<OutputProgression> = [
-    progression
-    ];
+        const results: Array<OutputProgression> = [
+            progression
+        ];
 
-    // We are in a traditional ionian: we can add all derived modes
-    if(data.mode.traditional
+        ProgressionGenie.addKnownProgression(results, progression, chords);
+
+        // We are in a traditional ionian: we can add all derived modes
+        if (data.mode.traditional
             && data.mode.name === Modes.TraditionalModes[0]) {
 
-    for (let offset = 1, semitones = traditionalModeSteps[offset - 1];
-        offset < Modes.TraditionalModes.length;
-        offset++ , semitones += traditionalModeSteps[offset - 1]) {
-        results.push(
-            new OutputProgression(
-                data.root.addSemitones(semitones).name(),
-                Modes.TraditionalModes[offset],
-                this.reorderChordsForTraditionalDerivedMode(progressionChords, offset)));
-    }
-}
+            for (let offset = 1, semitones = traditionalModeSteps[offset - 1];
+                offset < Modes.TraditionalModes.length;
+                offset++ , semitones += traditionalModeSteps[offset - 1]) {
 
-// TODO: More calc !
-return results;
+                const reorderedProgressionChords = this.reorderChordsForTraditionalDerivedMode(progressionChords, offset);
+                const reorderedProgression = new OutputProgression(
+                    data.root.addSemitones(semitones).name(),
+                    Modes.TraditionalModes[offset],
+                    reorderedProgressionChords);
+
+                results.push(reorderedProgression);
+                ProgressionGenie.addKnownProgression(results, reorderedProgression, chords);
+            }
+        }
+        return results;
+    }
+
+    private static addKnownProgression(results: Array<OutputProgression>, progression: OutputProgression, playedChords: Array<InputChord>) {
+        const presentChords = new StringMap<OutputChord>();
+        progression.chords.forEach((c) => presentChords.put(c.numeral, c));
+
+        for (const possibleProgression of Progressions.ProgressionsList) {
+            const candidate = new OutputProgression(progression.root, progression.modeName);
+            candidate.progressionName = possibleProgression.progressionAsString.join(' ');
+            candidate.chords = [];
+            // Score short progression first
+            candidate.score = 100 - possibleProgression.progressionAsNumber.length;
+
+            // build and count matches
+            let playedMatchesCount = 0;
+            let hasMissingChord = false;
+            for (const numeral of possibleProgression.progressionAsString) {
+                const chord = presentChords.get(numeral);
+                if (chord === undefined) {
+                    hasMissingChord = true;
+                    break;
+                }
+                candidate.chords.push(chord);
+                if (chord.played) {
+                    playedMatchesCount++;
+                }
+            }
+            if (!hasMissingChord
+                && playedMatchesCount === playedChords.length) {
+                console.log('Adding'+candidate.root+' '+candidate.modeName+' '+candidate.progressionName, candidate);
+                results.push(candidate);
+            }
+        }
     }
 }

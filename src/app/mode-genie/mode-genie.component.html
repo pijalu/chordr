@@ -19,8 +19,9 @@
         <h5>
             <a routerLink="/explorer" [queryParams]="{'root': progression.root, 'mode': progression.modeName }" title="Explore">
                 <img src="../assets/svgs/explore.svg" height="30" width="30" title="Explore"/>
-            </a>
-            {{progression.root}} {{progression.modeName}}            
+            </a>            
+            {{progression.root}} {{progression.modeName}} 
+            <span [hidden]='!progression.progressionName'>(type {{progression.progressionName}})</span>
         </h5>        
         <div class="chord-component" *ngFor="let chord of progression.chords" [class.played]='chord.played' (click)='addChord(chord)'>
             <app-chord-box label="{{chord.numeral}}. {{chord.name}} {{chord.type.toLowerCase()}}" [tab]='tabify(chord)'></app-chord-box>

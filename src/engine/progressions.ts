@@ -21,7 +21,7 @@ export namespace Progressions {
      * Progression class
      */
     export class Progression {
-        progressionAsString: string;
+        progressionAsString: Array<string>;
         progressionAsNumber: Array<number> = [];
         triads: Array<string> = [];
 
@@ -37,8 +37,8 @@ export namespace Progressions {
 
         /** Build a progression based on a string */
         constructor(progression: string) {
-            this.progressionAsString = progression;
-            for (const number of this.progressionAsString.split(/\ |,/)) {
+            this.progressionAsString = progression.split(/\ |,/);
+            for (const number of this.progressionAsString) {
                 let i = 1;
                 for (; i < RomanNumeral.length && RomanNumeral[i].toLowerCase() !== number.toLowerCase(); ++i) {
                     // No action
