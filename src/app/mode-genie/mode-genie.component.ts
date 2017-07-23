@@ -76,6 +76,7 @@ export class ModeGenieComponent implements OnInit {
   ngOnInit() {
   }
 
+  /** A Chord was updated/removed */
   onChange(event: ChangeEvent) {
     if (event.removed) {
       this.chords = this.chords.filter(c => c.id !== event.id);
@@ -100,6 +101,7 @@ export class ModeGenieComponent implements OnInit {
     this.calculateProgressions();
   }
 
+  /** find general name/type of a given chord */
   evaluate(c: Chord) {
     const fretboard = Fretboards.Fretboard.From('E');
     const notes = fretboard.asNotes(c.tab);
@@ -110,6 +112,7 @@ export class ModeGenieComponent implements OnInit {
     }
   }
 
+  /** Calculate progression */
   calculateProgressions() {
     this.calculating = true;
     // Perform calc in a timeout to allow UI update/smother feelings
@@ -123,7 +126,21 @@ export class ModeGenieComponent implements OnInit {
     }, 500);
   }
 
+  /** convert a progression entry to a chord */
   tabify(chord: OutputChord): string {
     return this.chordService.Variations(chord.name, chord.type.toLowerCase(), 0).join(',');
+  }
+
+  /** Add a chord to played progression */
+  addChord(chord: OutputChord) {
+    if (chord.played) {
+      return;
+    }
+    const emptyChord = this.chords[this.chords.length - 1];
+    emptyChord.tab=this.tabify(chord);
+
+    this.onChange(new ChangeEvent(emptyChord.id,
+      emptyChord.tab,
+      false));
   }
 }

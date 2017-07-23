@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angular/core';
 import { Svg, SvgCircle, SvgPath, SvgText } from '../svg/svg';
 
 import { Chords as ChordEngine } from '../../engine/chords';
@@ -25,7 +25,7 @@ export class ChangeEvent {
   templateUrl: './chord-input.component.html',
   styleUrls: ['./chord-input.component.css']
 })
-export class ChordInputComponent implements OnInit {
+export class ChordInputComponent implements OnInit, OnChanges {
   /* Map of all SVG circles */
   circleMap: Map<CircleCookie, SvgCircle>;
   /* for each string, the current selected circle if any */
@@ -44,7 +44,14 @@ export class ChordInputComponent implements OnInit {
 
   constructor() { }
 
+  ngOnChanges() {
+    this.rebuild();
+  }
+
   ngOnInit() {
+  }
+
+  rebuild() {
     if (this.tab === undefined
       || this.tab.length < 6) {
       this.tab = '-1,-1,-1,-1,-1,-1';
