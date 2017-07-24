@@ -36,7 +36,7 @@ export namespace Progressions {
         }
 
         /** Build a progression based on a string */
-        constructor(progression: string) {
+        constructor(public progression: string) {
             this.progressionAsString = progression.split(/\ |,/);
             for (const number of this.progressionAsString) {
                 let i = 1;
@@ -74,11 +74,11 @@ export namespace Progressions {
         'ii V I',
         'V III',
         'I IV ii',
-        'I V vi iii IV I IV V',
-        'i VII i V III VII i V i',
-        'I IV I V I IV I V I',
+        // 'I V vi iii IV I IV V',
+        // 'i VII i V III VII i V i',
+        // 'I IV I V I IV I V I',
         'I V vi IV',
-        'III VII i V III VII i V i',
+        // 'III VII i V III VII i V i',
         'I vi ii V'
     ]);
 }

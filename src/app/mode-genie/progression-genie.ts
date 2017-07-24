@@ -35,17 +35,42 @@ class ProgressionData {
     root: Notes.Note;
     mode: Modes.Mode;
     chords: Array<Chords.Chord>;
-    chordsSet: StringSet;
+    chordsMap: StringMap<Chords.Chord>;
+    numeralMap: StringMap<Chords.Chord>;
+    progressions: Array<Progressions.Progression>;
 
     constructor(public rootName: string,
         public modeName: string) {
         this.root = new Notes.Note(rootName);
         this.mode = Modes.Mode.fromName(modeName);
         this.chords = this.mode.Chords(this.root);
-        this.chordsSet = new StringSet();
+        this.chordsMap = new StringMap<Chords.Chord>();
+        this.numeralMap = new StringMap<Chords.Chord>();
         for (const chord of this.chords) {
-            this.chordsSet.add(chord.NameAndType().toUpperCase());
+            this.chordsMap.put(chord.NameAndType().toUpperCase(), chord);
+            this.numeralMap.put(Progressions.Progression.NumeralByValueAndTriad(
+                chord.numeralInProgression,
+                chord.triad.name),
+                chord);
         }
+        // Add matching progressions
+        this.progressions = [];
+        for (const progression of Progressions.ProgressionsList) {
+            const length = progression.progressionAsString.length;
+            let i = 0;
+            for (; i < length
+                && this.numeralMap.contains(progression.progressionAsString[i]);
+                i++) {
+                // Do nothing, just loop
+            }
+            if (i === length) {
+                this.progressions.push(progression);
+                // console.log('Precalc: adding ' + progression.progression + ' for root ' + rootName + ' mode ' + modeName, progression);
+            } else {
+                // console.log('Precalc: skipping ' + progression.progression + ' for root ' + rootName + ' mode ' + modeName, progression);
+            }
+        }
+        // console.log('Added ' + this.progressions.length + ' progressions for root ' + rootName + ' mode ' + modeName);
     }
 }
 
@@ -53,7 +78,7 @@ class ProgressionData {
     - If same order has provided chord - more points
 */
 export class ProgressionGenie {
-    private static progressionData: Array<ProgressionData>;
+    private static progressionData: StringMap<ProgressionData>;
 
     /** preload progression data */
     static preCalculate() {
@@ -63,16 +88,16 @@ export class ProgressionGenie {
     }
 
     /** Return calculatio data - building as needed */
-    private static getCalculationData(): Array<ProgressionData> {
+    private static getCalculationData(): StringMap<ProgressionData> {
         if (!this.progressionData) {
             console.log('Building initial calculation data');
-            this.progressionData = [];
+            this.progressionData = new StringMap<ProgressionData>();
             for (const root of Notes.NoteName) {
                 for (const mode of Modes.Mode.Names()) {
-                    // Don't select tradional derived mode - we know they will match
-                    if (!Modes.Mode.fromName(mode).traditionalDerived) {
-                        this.progressionData.push(new ProgressionData(root, mode));
-                    }
+                    const dataKey = root + ' ' + mode;
+                    this.progressionData.put(dataKey,
+                        new ProgressionData(root, mode));
+                    console.log('Precalc: Added data for ' + dataKey);
                 }
             }
             console.log('Done building Initial calculation data');
@@ -86,11 +111,14 @@ export class ProgressionGenie {
             return [];
         }
         const results: Array<OutputProgression> = [];
-        for (const data of this.getCalculationData()) {
-            for (const progression of ProgressionGenie.buildByProgressionData(
-                data,
-                chords)) {
-                results.push(progression);
+        for (const data of this.getCalculationData().values()) {
+            // Filter derived as they will be included when processing traditional source (ionian)
+            if (!data.mode.traditionalDerived) {
+                for (const progression of ProgressionGenie.buildByProgressionData(
+                    data,
+                    chords)) {
+                    results.push(progression);
+                }
             }
         }
         return results.sort((a, b) => {
@@ -110,7 +138,7 @@ export class ProgressionGenie {
     }
 
     /** Count matches from the proposed progression chords */
-    private static countMatches(progressionChords: StringSet,
+    private static countMatches(progressionChords: StringMap<Chords.Chord>,
         inputChords: Array<InputChord>): number {
         let matches = 0;
         for (const chord of inputChords) {
@@ -160,7 +188,7 @@ export class ProgressionGenie {
     /** Check and build a proposal based on a root/mode precalculated data */
     private static buildByProgressionData(data: ProgressionData, chords: Array<InputChord>): Array<OutputProgression> {
         // If we don't match all the input chord, we can stop now
-        const matches = ProgressionGenie.countMatches(data.chordsSet, chords);
+        const matches = ProgressionGenie.countMatches(data.chordsMap, chords);
         if (matches < chords.length) {
             // console.log('Short cut', data.rootName, data.modeName, matches, data.chordsSet, chords);
             return [];
@@ -178,7 +206,7 @@ export class ProgressionGenie {
             progression
         ];
 
-        ProgressionGenie.addKnownProgression(results, progression, chords);
+        ProgressionGenie.addKnownProgression(results, progression, chords, data);
 
         // We are in a traditional ionian: we can add all derived modes
         if (data.mode.traditional
@@ -188,24 +216,36 @@ export class ProgressionGenie {
                 offset < Modes.TraditionalModes.length;
                 offset++ , semitones += traditionalModeSteps[offset - 1]) {
 
+                const rootName = data.root.addSemitones(semitones).name();
+                const modeName = Modes.TraditionalModes[offset];
                 const reorderedProgressionChords = this.reorderChordsForTraditionalDerivedMode(progressionChords, offset);
                 const reorderedProgression = new OutputProgression(
-                    data.root.addSemitones(semitones).name(),
-                    Modes.TraditionalModes[offset],
+                    rootName,
+                    modeName,
                     reorderedProgressionChords);
 
                 results.push(reorderedProgression);
-                ProgressionGenie.addKnownProgression(results, reorderedProgression, chords);
+
+                const dataKey = rootName + ' ' + modeName;
+                const newModeData = ProgressionGenie.getCalculationData().get(dataKey);
+                // console.log('Getting new mode data', dataKey, newModeData);
+                ProgressionGenie.addKnownProgression(results,
+                    reorderedProgression,
+                    chords,
+                    newModeData);
             }
         }
         return results;
     }
 
-    private static addKnownProgression(results: Array<OutputProgression>, progression: OutputProgression, playedChords: Array<InputChord>) {
+    private static addKnownProgression(results: Array<OutputProgression>,
+        progression: OutputProgression,
+        playedChords: Array<InputChord>,
+        data: ProgressionData) {
         const presentChords = new StringMap<OutputChord>();
         progression.chords.forEach((c) => presentChords.put(c.numeral, c));
 
-        for (const possibleProgression of Progressions.ProgressionsList) {
+        for (const possibleProgression of data.progressions) {
             const candidate = new OutputProgression(progression.root, progression.modeName);
             candidate.progressionName = possibleProgression.progressionAsString.join(' ');
             candidate.chords = [];
@@ -213,7 +253,7 @@ export class ProgressionGenie {
             candidate.score = 100 - possibleProgression.progressionAsNumber.length;
 
             // build and count matches
-            let playedMatchesCount = 0;
+            const playedMatchesCount = new StringSet();
             let hasMissingChord = false;
             for (const numeral of possibleProgression.progressionAsString) {
                 const chord = presentChords.get(numeral);
@@ -223,13 +263,21 @@ export class ProgressionGenie {
                 }
                 candidate.chords.push(chord);
                 if (chord.played) {
-                    playedMatchesCount++;
+                    playedMatchesCount.add(chord.name + chord.type);
                 }
             }
             if (!hasMissingChord
-                && playedMatchesCount === playedChords.length) {
-                console.log('Adding'+candidate.root+' '+candidate.modeName+' '+candidate.progressionName, candidate);
+                && playedMatchesCount.size() === playedChords.length) {
+                /*
+                console.log('Adding ' + candidate.root + ' ' + candidate.modeName + ' ' + candidate.progressionName
+                    + ' matches ' + playedMatchesCount + ' of ' + playedChords.length, candidate);
+                */
                 results.push(candidate);
+            } else {
+                /*
+                console.log('Skipping ' + candidate.root + ' ' + candidate.modeName + ' ' + candidate.progressionName
+                    + ' matches ' + playedMatchesCount + ' of ' + playedChords.length, candidate);
+                */
             }
         }
     }
