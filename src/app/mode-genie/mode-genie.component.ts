@@ -10,6 +10,7 @@ import { Notes } from '../../engine/notes';
 import { OutputChord, OutputProgression, ProgressionGenie } from './progression-genie';
 
 import { ChordService } from '../chord.service';
+import { ConfigService, GenieConfiguration } from '../config.service';
 
 export class Chord {
   static ids = 0;
@@ -37,14 +38,21 @@ const chordsStorageKey = 'ModeGenieComponent_chords';
   selector: 'app-mode-genie',
   templateUrl: './mode-genie.component.html',
   styleUrls: ['./mode-genie.component.css'],
-  providers: [ChordService]
+  providers: [ChordService, ConfigService]
 })
 export class ModeGenieComponent implements OnInit {
   public chords: Array<Chord> = [];
   public progressions: Array<OutputProgression> = [];
   public calculating = false;
+  public calculated = false;
 
-  constructor(private localStorageService: LocalStorageService, private chordService: ChordService) {
+  isAutoCalculated(): boolean {
+    return this.configService.GenieConfiguration().searchProgressionAutomatically;
+  }
+
+  constructor(private localStorageService: LocalStorageService,
+    private chordService: ChordService,
+    private configService: ConfigService) {
     this.chords = localStorageService.get(chordsStorageKey);
     if (this.chords === null) {
       this.clear();
@@ -60,7 +68,7 @@ export class ModeGenieComponent implements OnInit {
     ProgressionGenie.preCalculate();
 
     // Calculate if we have restored data
-    if (this.chords.length > 0) {
+    if (this.chords.length > 0 && this.isAutoCalculated()) {
       this.calculateProgressions();
     }
   }
@@ -75,6 +83,8 @@ export class ModeGenieComponent implements OnInit {
 
   ngOnInit() {
   }
+
+
 
   /** A Chord was updated/removed */
   onChange(event: ChangeEvent) {
@@ -98,7 +108,13 @@ export class ModeGenieComponent implements OnInit {
       }
     }
     this.localStorageService.set(chordsStorageKey, this.chords);
-    this.calculateProgressions();
+    this.calculated = false;
+    
+    if (this.isAutoCalculated()) {
+      this.calculateProgressions();
+    } else {
+      this.progressions = [];
+    }
   }
 
   /** find general name/type of a given chord */
@@ -123,6 +139,7 @@ export class ModeGenieComponent implements OnInit {
         this.chords.filter((c) => c.name !== undefined));
       console.log('Done calculating: found ' + this.progressions.length + ' progression(s)');
       this.calculating = false;
+      this.calculated = true;
     }, 500);
   }
 

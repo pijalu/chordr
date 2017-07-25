@@ -25,6 +25,7 @@ import { TabPipe } from './tab.pipe';
 import { CustomChordComponent } from './custom-chord/custom-chord.component';
 import { TabToNotesPipe } from './tab-to-notes.pipe';
 import { ChordExplorerComponent } from './chord-explorer/chord-explorer.component';
+import { ConfigComponent } from './config/config.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { ChordExplorerComponent } from './chord-explorer/chord-explorer.componen
     TabPipe,
     CustomChordComponent,
     TabToNotesPipe,
-    ChordExplorerComponent
+    ChordExplorerComponent,
+    ConfigComponent
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,7 @@
 <app-dismissable-alert key="modeGenie" title="Genie" text=" lets you enter chords visually and helps defining matching progression.">  
 </app-dismissable-alert>
+<app-dismissable-alert [hidden]="isAutoCalculated()" key="modeGenieNoAuto" title="Automatic calculation" text=" is disabled, click 'Refresh progressions now' button to start calculations !">  
+</app-dismissable-alert>
 
 <div *ngFor="let chord of chords" class="chord-component unselectable" >
     <app-custom-chord [id]="chord.id" name="≈{{chord.name}} {{chord.type}}" [tab]="chord.tab" (onChange)="onChange($event)"></app-custom-chord>
@@ -10,6 +12,10 @@
     <div class="alert alert-info">
         <i class="fa fa-circle-o-notch fa-spin"></i> calculating
     </div>
+</div>
+
+<div [hidden]="isAutoCalculated() || calculated" class="mt-4">
+    <button type="button" class="btn btn-primary" (click)="calculateProgressions()"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh progressions now</button>    
 </div>
 
 <div class="mt-4" [hidden]="calculating || !progressions || progressions.length === 0">
@@ -29,9 +35,8 @@
     </div>
 </div>
 
-
-<div class="mt-4" [hidden]="calculating || progressions.length !== 0">
+<div class="mt-4" [hidden]="!calculated || calculating || progressions.length !== 0">
     <div class="alert alert-warning">
-        No matching progressions found!
+        No matching progressions found !
     </div>
 </div>
