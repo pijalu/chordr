@@ -106,7 +106,7 @@ export class ProgressionGenie {
     }
 
     /** Build proposed progression based on inputChords */
-    static build(chords: Array<InputChord>): Array<OutputProgression> {
+    static build(chords: Array<InputChord>, disabledModes: StringSet): Array<OutputProgression> {
         if (chords.length === 0) {
             return [];
         }
@@ -116,7 +116,8 @@ export class ProgressionGenie {
             if (!data.mode.traditionalDerived) {
                 for (const progression of ProgressionGenie.buildByProgressionData(
                     data,
-                    chords)) {
+                    chords,
+                    disabledModes)) {
                     results.push(progression);
                 }
             }
@@ -186,7 +187,9 @@ export class ProgressionGenie {
     }
 
     /** Check and build a proposal based on a root/mode precalculated data */
-    private static buildByProgressionData(data: ProgressionData, chords: Array<InputChord>): Array<OutputProgression> {
+    private static buildByProgressionData(data: ProgressionData,
+        chords: Array<InputChord>,
+        disabledModes: StringSet): Array<OutputProgression> {
         // If we don't match all the input chord, we can stop now
         const matches = ProgressionGenie.countMatches(data.chordsMap, chords);
         if (matches < chords.length) {
@@ -202,11 +205,20 @@ export class ProgressionGenie {
             data.modeName,
             progressionChords);
 
-        const results: Array<OutputProgression> = [
-            progression
-        ];
+        // Favor progression starting with same first chord
+        if (chords[0].name === progressionChords[0].name) {
+            progression.score += 10;
+        }
 
-        ProgressionGenie.addKnownProgression(results, progression, chords, data);
+        const results: Array<OutputProgression> = [];
+
+        // Check we don't skip this mode - note: Calculation still need to occurs for sub modes !
+        if (!disabledModes.contains(data.modeName)) {
+            results.push(progression);
+            ProgressionGenie.addKnownProgression(results, progression, chords, data);
+        } else {
+            console.log('Skipping (partial)', data.modeName);
+        }
 
         // We are in a traditional ionian: we can add all derived modes
         if (data.mode.traditional
@@ -215,14 +227,22 @@ export class ProgressionGenie {
             for (let offset = 1, semitones = traditionalModeSteps[offset - 1];
                 offset < Modes.TraditionalModes.length;
                 offset++ , semitones += traditionalModeSteps[offset - 1]) {
-
-                const rootName = data.root.addSemitones(semitones).name();
                 const modeName = Modes.TraditionalModes[offset];
+                if (disabledModes.contains(modeName)) {
+                    console.log('Skipping', modeName);
+                    continue;
+                }
+                const rootName = data.root.addSemitones(semitones).name();
+
                 const reorderedProgressionChords = this.reorderChordsForTraditionalDerivedMode(progressionChords, offset);
                 const reorderedProgression = new OutputProgression(
                     rootName,
                     modeName,
                     reorderedProgressionChords);
+                // Favor progression starting with same first chord
+                if (chords[0].name === reorderedProgressionChords[0].name) {
+                    reorderedProgression.score += 10;
+                }
 
                 results.push(reorderedProgression);
 
@@ -250,7 +270,7 @@ export class ProgressionGenie {
             candidate.progressionName = possibleProgression.progressionAsString.join(' ');
             candidate.chords = [];
             // Score short progression first
-            candidate.score = 100 - possibleProgression.progressionAsNumber.length;
+            candidate.score = (100 - possibleProgression.progressionAsNumber.length) * 100;
 
             // build and count matches
             const playedMatchesCount = new StringSet();
@@ -268,16 +288,11 @@ export class ProgressionGenie {
             }
             if (!hasMissingChord
                 && playedMatchesCount.size() === playedChords.length) {
-                /*
-                console.log('Adding ' + candidate.root + ' ' + candidate.modeName + ' ' + candidate.progressionName
-                    + ' matches ' + playedMatchesCount + ' of ' + playedChords.length, candidate);
-                */
+                // Favor candidate with same first note
+                if (playedChords[0].name === candidate.chords[0].name) {
+                    candidate.score += 10;
+                }
                 results.push(candidate);
-            } else {
-                /*
-                console.log('Skipping ' + candidate.root + ' ' + candidate.modeName + ' ' + candidate.progressionName
-                    + ' matches ' + playedMatchesCount + ' of ' + playedChords.length, candidate);
-                */
             }
         }
     }

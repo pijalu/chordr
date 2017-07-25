@@ -3,7 +3,11 @@ import { LocalStorageService } from 'angular-2-local-storage';
 
 /** Genie configuration */
 export class GenieConfiguration {
-  public searchProgressionAutomatically = true;
+  /** disabled automatic progression calculation */
+  searchProgressionAutomatically = true;
+  /** List of excluded modes */
+  excludedMode: Array<string> = [];
+  
   constructor() { }
 }
 

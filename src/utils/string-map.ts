@@ -1,9 +1,14 @@
 /** Helper for tracking note as set */
 interface SetItem<V> { [k: string]: V; }
 
+export interface KeySetItem<V> {
+    key: string;
+    value: V;
+}
+
 /** Simple string map */
 export class StringMap<V> {
-    private data: SetItem<V> = {};
+    public data: SetItem<V> = {};
     constructor() { }
 
     /** keys */
@@ -18,6 +23,18 @@ export class StringMap<V> {
             values.push(this.data[key]);
         }
         return values;
+    }
+
+    /** get key/value */
+    keySet(): Array<KeySetItem<V>> {
+        const result: Array<KeySetItem<V>> = [];
+        for (const key of this.keys()) {
+            result.push({
+                key: key,
+                value: this.data[key]
+            });
+        }
+        return result;
     }
 
     /** put elm */

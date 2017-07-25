@@ -1,7 +1,18 @@
 <h4>Genie Configuration</h4>
 <div>
-  <div>
-    <input id="genieConfiguration.searchProgressionAutomatically" type="checkbox" [(ngModel)]="genieConfiguration.searchProgressionAutomatically" (ngModelChange)="genieConfigurationUpdate()"/>
+  <div class="form-group">
+    <input id="genieConfiguration.searchProgressionAutomatically" type="checkbox" [(ngModel)]="genieConfiguration.searchProgressionAutomatically"
+      (ngModelChange)="genieConfigurationUpdate()" />
     <label for="genieConfiguration.searchProgressionAutomatically">Search for progression automatically</label>
   </div>
+  <div class="mt-4 well">
+    <label>Ignore following mode for Genie progressions
+    <div class="group">     
+        <label class="checkbox-inline col-3" *ngFor="let mode of genieConfigurationModes()">
+          <input type="checkbox" [(ngModel)]="genieConfigurationDisabledModes.data[mode]" (ngModelChange)="genieConfigurationDisabledModesUpdate(mode,$event)" />
+          {{mode}}
+        </label>
+    </div>
+  </label>
+</div>
 </div>

@@ -1,3 +1,4 @@
+import { StringSet } from '../../utils/string-set';
 import { Component, OnInit } from '@angular/core';
 import { ChangeEvent } from '../custom-chord/custom-chord.component';
 
@@ -85,6 +86,12 @@ export class ModeGenieComponent implements OnInit {
   }
 
 
+  disabledModes(): StringSet {
+    const disabledModes = new StringSet();
+    this.configService.GenieConfiguration().excludedMode.forEach(m => disabledModes.add(m));
+    return disabledModes;
+  }
+
 
   /** A Chord was updated/removed */
   onChange(event: ChangeEvent) {
@@ -109,7 +116,7 @@ export class ModeGenieComponent implements OnInit {
     }
     this.localStorageService.set(chordsStorageKey, this.chords);
     this.calculated = false;
-    
+
     if (this.isAutoCalculated()) {
       this.calculateProgressions();
     } else {
@@ -136,7 +143,8 @@ export class ModeGenieComponent implements OnInit {
       console.log('Start calculating...');
       this.progressions = ProgressionGenie.build(
         // Remove blank (new) chord
-        this.chords.filter((c) => c.name !== undefined));
+        this.chords.filter((c) => c.name !== undefined),
+        this.disabledModes());
       console.log('Done calculating: found ' + this.progressions.length + ' progression(s)');
       this.calculating = false;
       this.calculated = true;
