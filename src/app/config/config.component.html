@@ -15,7 +15,7 @@
       <label for="genieConfiguration.skipCommonProgressionPattern">Skip numeral progression pattern from calculation</label>
     </div>
     <div class="mt-4 well">
-      <label>Ignore following mode for Genie progressions
+      <label>Ignore following modes for Genie progressions
     <div class="group">     
         <label class="checkbox-inline col-3" *ngFor="let mode of genieConfigurationModes()">
           <input type="checkbox" [(ngModel)]="genieConfigurationDisabledModes.data[mode]" (ngModelChange)="genieConfigurationDisabledModesUpdate(mode,$event)" />
