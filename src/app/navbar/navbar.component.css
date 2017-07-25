@@ -14,6 +14,9 @@ body {
   box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
 }
 
-@media only screen and (max-width: 720px) {
-     header { position: absolute; }
+@media only screen and (max-width: 300px) {
+    .adaptive-top { 
+         position: absolute; 
+    }
 }
+
