@@ -3,6 +3,8 @@ import { ChangeEvent } from '../chord/chord.component';
 
 import { LocalStorageService } from 'angular-2-local-storage';
 
+import { ActivatedRoute } from '@angular/router';
+
 class Chord {
   static ids = 0;
 
@@ -31,8 +33,31 @@ const chordsStorageKey = 'ChordLibraryComponent_chords';
 export class ChordLibraryComponent implements OnInit {
   chords: Array<Chord>;
 
-  constructor(private localStorageService: LocalStorageService) {
-    this.chords = localStorageService.get(chordsStorageKey);
+  constructor(private localStorageService: LocalStorageService, private route: ActivatedRoute) {
+  }
+
+  ngOnInit() {
+    const routeParam = <string>this.route.snapshot.queryParams['chords'];
+    if (!routeParam) {
+      this.loadChordFromStorage();
+    } else {
+      try {
+        this.chords = [];
+        routeParam.split(',').forEach((c) => {
+          const chord = c.split(' ');
+          this.chords.push(new Chord(chord[0].toUpperCase(), chord[1].toLowerCase(), 0));
+        });
+        this.chords.push(new Chord(undefined, undefined, undefined));
+        this.localStorageService.set(chordsStorageKey, this.chords);
+      } catch (err) {
+        console.error('Failed to load chords', err);
+        this.clear();
+      }
+    }
+  }
+
+  loadChordFromStorage() {
+    this.chords = this.localStorageService.get(chordsStorageKey);
     if (this.chords === null) {
       this.clear();
     }
@@ -42,9 +67,6 @@ export class ChordLibraryComponent implements OnInit {
         Chord.ids = c.numericId + 1;
       }
     });
-  }
-
-  ngOnInit() {
   }
 
   clear() {

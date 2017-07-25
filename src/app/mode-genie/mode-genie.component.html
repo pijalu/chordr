@@ -28,6 +28,9 @@
             </a>            
             {{progression.root}} {{progression.modeName}} 
             <span [hidden]='!progression.progressionName'>(type {{progression.progressionName}})</span>
+            <a routerLink="/library" [queryParams]="{'chords': getAsQueryParams(progression.chords)}" title="Copy to chord library">
+                <img src="../assets/svgs/achord.svg" height="30" width="30" title="Copy to chord library"/>
+            </a>
         </h5>        
         <div class="chord-component" *ngFor="let chord of progression.chords" [class.played]='chord.played' (click)='addChord(chord)'>
             <app-chord-box label="{{chord.numeral}}. {{chord.name}} {{chord.type.toLowerCase()}}" [tab]='tabify(chord)'></app-chord-box>

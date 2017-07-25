@@ -89,7 +89,6 @@ export class ModeGenieComponent implements OnInit {
   ngOnInit() {
   }
 
-
   disabledModes(): StringSet {
     const disabledModes = new StringSet();
     this.configService.GenieConfiguration().excludedMode.forEach(m => disabledModes.add(m));
@@ -154,6 +153,13 @@ export class ModeGenieComponent implements OnInit {
       this.calculating = false;
       this.calculated = true;
     }, 500);
+  }
+
+  /** Convert a progression to chord string */
+  getAsQueryParams(chords: Array<OutputChord>): string {
+    const result: Array<string> = [];
+    chords.forEach((c) => result.push(c.name + ' ' + c.type));
+    return result.join(',');
   }
 
   /** convert a progression entry to a chord */

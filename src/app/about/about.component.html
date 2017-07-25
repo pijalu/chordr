@@ -1,4 +1,4 @@
-<h3>Authors</h3>
+<h3>Author</h3>
 <ul class="list-unstyled">
   <li>
     <a href="mailto:pierre.poissinger@gmail.com">Pierre Poissinger</a>
@@ -33,16 +33,3 @@
     </a>Created by il Capitano from the <a href="https://thenounproject.com/">Noun Project</a>
   </li>
 </ul>
-
-<h3>Troubleshooting</h3>
-<div>
-  <div [hidden]="!isResetInfoShown">
-    <div class="alert alert-info fade show" role="alert">
-      <button type="button" class="close" aria-label="Close" (click)="toggleResetInfoShown()">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <strong>Local storage</strong> has been cleared !
-    </div>    
-  </div>
-  <button type="button" class="btn btn-danger btn-sm" (click)="clearStorage()">Reset all local storage</button>
-</div>

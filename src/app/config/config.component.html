@@ -1,17 +1,21 @@
-<h4>Genie Configuration</h4>
+<app-dismissable-alert key="modeGenie" title="Config" text=" lets you change application parameters.">  
+</app-dismissable-alert>
+
 <div>
-  <div class="form-group">
-    <input id="genieConfiguration.searchProgressionAutomatically" type="checkbox" [(ngModel)]="genieConfiguration.searchProgressionAutomatically"
-      (ngModelChange)="genieConfigurationUpdate()" />
-    <label for="genieConfiguration.searchProgressionAutomatically">Search for progression automatically</label>
-  </div>
-  <div class="form-group">
-    <input id="genieConfiguration.skipCommonProgressionPattern" type="checkbox" [(ngModel)]="genieConfiguration.skipCommonProgressionPattern"
-      (ngModelChange)="genieConfigurationUpdate()" />
-    <label for="genieConfiguration.skipCommonProgressionPattern">Skip numeral progression pattern from calculation</label>
-  </div>
-  <div class="mt-4 well">
-    <label>Ignore following mode for Genie progressions
+  <h4>Genie Configuration</h4>
+  <div>
+    <div class="form-group">
+      <input id="genieConfiguration.searchProgressionAutomatically" type="checkbox" [(ngModel)]="genieConfiguration.searchProgressionAutomatically"
+        (ngModelChange)="genieConfigurationUpdate()" />
+      <label for="genieConfiguration.searchProgressionAutomatically">Search for progression automatically</label>
+    </div>
+    <div class="form-group">
+      <input id="genieConfiguration.skipCommonProgressionPattern" type="checkbox" [(ngModel)]="genieConfiguration.skipCommonProgressionPattern"
+        (ngModelChange)="genieConfigurationUpdate()" />
+      <label for="genieConfiguration.skipCommonProgressionPattern">Skip numeral progression pattern from calculation</label>
+    </div>
+    <div class="mt-4 well">
+      <label>Ignore following mode for Genie progressions
     <div class="group">     
         <label class="checkbox-inline col-3" *ngFor="let mode of genieConfigurationModes()">
           <input type="checkbox" [(ngModel)]="genieConfigurationDisabledModes.data[mode]" (ngModelChange)="genieConfigurationDisabledModesUpdate(mode,$event)" />
@@ -19,5 +23,20 @@
         </label>
     </div>
     </label>
-  </div>  
+  </div>
+</div>
+</div>
+<div class="mt-4">
+  <h4>Troubleshooting</h4>
+  <div>
+    <div [hidden]="!isResetInfoShown">
+      <div class="alert alert-info fade show" role="alert">
+        <button type="button" class="close" aria-label="Close" (click)="toggleResetInfoShown()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+        <strong>Local storage</strong> has been cleared !
+      </div>
+    </div>
+    <button type="button" class="btn btn-danger btn-sm" (click)="clearStorage()">Reset all local storage</button>
+  </div>
 </div>
