@@ -5,6 +5,11 @@
       (ngModelChange)="genieConfigurationUpdate()" />
     <label for="genieConfiguration.searchProgressionAutomatically">Search for progression automatically</label>
   </div>
+  <div class="form-group">
+    <input id="genieConfiguration.skipCommonProgressionPattern" type="checkbox" [(ngModel)]="genieConfiguration.skipCommonProgressionPattern"
+      (ngModelChange)="genieConfigurationUpdate()" />
+    <label for="genieConfiguration.skipCommonProgressionPattern">Skip numeral progression pattern from calculation</label>
+  </div>
   <div class="mt-4 well">
     <label>Ignore following mode for Genie progressions
     <div class="group">     
@@ -13,6 +18,6 @@
           {{mode}}
         </label>
     </div>
-  </label>
-</div>
+    </label>
+  </div>  
 </div>

@@ -5,6 +5,8 @@ import { LocalStorageService } from 'angular-2-local-storage';
 export class GenieConfiguration {
   /** disabled automatic progression calculation */
   searchProgressionAutomatically = true;
+  /** Skip common progression pattern from calculation */
+  skipCommonProgressionPattern = false;
   /** List of excluded modes */
   excludedMode: Array<string> = [];
   

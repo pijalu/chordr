@@ -106,7 +106,7 @@ export class ProgressionGenie {
     }
 
     /** Build proposed progression based on inputChords */
-    static build(chords: Array<InputChord>, disabledModes: StringSet): Array<OutputProgression> {
+    static build(chords: Array<InputChord>, disabledModes: StringSet, skipPattern: boolean): Array<OutputProgression> {
         if (chords.length === 0) {
             return [];
         }
@@ -117,7 +117,8 @@ export class ProgressionGenie {
                 for (const progression of ProgressionGenie.buildByProgressionData(
                     data,
                     chords,
-                    disabledModes)) {
+                    disabledModes,
+                    skipPattern)) {
                     results.push(progression);
                 }
             }
@@ -189,7 +190,8 @@ export class ProgressionGenie {
     /** Check and build a proposal based on a root/mode precalculated data */
     private static buildByProgressionData(data: ProgressionData,
         chords: Array<InputChord>,
-        disabledModes: StringSet): Array<OutputProgression> {
+        disabledModes: StringSet,
+        skipPattern: boolean): Array<OutputProgression> {
         // If we don't match all the input chord, we can stop now
         const matches = ProgressionGenie.countMatches(data.chordsMap, chords);
         if (matches < chords.length) {
@@ -215,7 +217,9 @@ export class ProgressionGenie {
         // Check we don't skip this mode - note: Calculation still need to occurs for sub modes !
         if (!disabledModes.contains(data.modeName)) {
             results.push(progression);
-            ProgressionGenie.addKnownProgression(results, progression, chords, data);
+            if (!skipPattern) {
+                ProgressionGenie.addKnownProgression(results, progression, chords, data);
+            }
         } else {
             console.log('Skipping (partial)', data.modeName);
         }
@@ -249,10 +253,12 @@ export class ProgressionGenie {
                 const dataKey = rootName + ' ' + modeName;
                 const newModeData = ProgressionGenie.getCalculationData().get(dataKey);
                 // console.log('Getting new mode data', dataKey, newModeData);
-                ProgressionGenie.addKnownProgression(results,
-                    reorderedProgression,
-                    chords,
-                    newModeData);
+                if (!skipPattern) {
+                    ProgressionGenie.addKnownProgression(results,
+                        reorderedProgression,
+                        chords,
+                        newModeData);
+                }
             }
         }
         return results;

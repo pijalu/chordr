@@ -51,6 +51,10 @@ export class ModeGenieComponent implements OnInit {
     return this.configService.GenieConfiguration().searchProgressionAutomatically;
   }
 
+  skipCommonPatternFromCalculation(): boolean {
+    return this.configService.GenieConfiguration().skipCommonProgressionPattern;
+  }
+
   constructor(private localStorageService: LocalStorageService,
     private chordService: ChordService,
     private configService: ConfigService) {
@@ -144,7 +148,8 @@ export class ModeGenieComponent implements OnInit {
       this.progressions = ProgressionGenie.build(
         // Remove blank (new) chord
         this.chords.filter((c) => c.name !== undefined),
-        this.disabledModes());
+        this.disabledModes(),
+        this.skipCommonPatternFromCalculation());
       console.log('Done calculating: found ' + this.progressions.length + ' progression(s)');
       this.calculating = false;
       this.calculated = true;
