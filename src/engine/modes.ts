@@ -18,15 +18,8 @@ export namespace Modes {
         /** Semitones distance for the mode */
         semitones: Array<number>;
 
-        /** build a default triads (offset 0: ionian) */
-        public static defaultTriads(offset: number): Array<string> {
-            const ionianTriads = 'MAJ MIN MIN MAJ MAJ MIN DIM'.split(' ');
-            const triads: Array<string> = [];
-            for (let i = 0; i < ionianTriads.length; i++) {
-                triads.push(ionianTriads[(i + offset) % ionianTriads.length]);
-            }
-            return triads;
-        }
+        /** calculated triads */
+        triads: Array<string>;
 
         /** Build a default step progression (offset 0: ionian) */
         public static defaultSteps(offset: number): Array<string> {
@@ -54,11 +47,33 @@ export namespace Modes {
             return result;
         }
 
+        /** Build triads */
+        public static Triads(semitones: Array<number>): Array<string> {
+            const results: Array<string> = [];
+
+            // Rewind back to root
+            for (let i = -2; i < semitones.length - 1; i++) {
+                const firstThirds = semitones[(i + 1) % semitones.length] + semitones[(i + 2) % semitones.length];
+                const secondThirds = firstThirds +
+                    + semitones[(i + 3) % semitones.length]
+                    + semitones[(i + 4) % semitones.length];
+
+                for (const triad of Chords.Triads.List()) {
+                    if (triad.interval[1] === firstThirds
+                        && triad.interval[2] === secondThirds) {
+                        results.push(triad.name);
+                        break;
+                    }
+                }
+            }
+
+            return results;
+        }
+
         /** Build a default mode, derived from ionian (by offset) */
         static buildDefaultMode(offset: number): Mode {
             return new Mode(TraditionalModes[offset],
                 Mode.defaultSteps(offset),
-                Mode.defaultTriads(offset),
                 true,
                 offset !== 0);
         }
@@ -77,10 +92,10 @@ export namespace Modes {
         constructor(
             public name: string,
             public step: Array<string>,
-            public triads: Array<string>,
             public traditional?: boolean,
             public traditionalDerived?: boolean) {
             this.semitones = Mode.Semitones(step);
+            this.triads = Mode.Triads(this.semitones);
         }
 
         /** Return chords from the mode, based on provided root */
@@ -113,12 +128,10 @@ export namespace Modes {
         }
         // Melodic Minor
         m['melodic'] = new Mode('melodic',
-            'W H W W W W H'.split(' '),
-            'MIN MIN AUG MAJ MAJ DIM DIM'.split(' '));
+            'W H W W W W H'.split(' '));
         // Harmonic Minor
         m['harmonic'] = new Mode('harmonic',
-            'W H W W H WH H'.split(' '),
-            'MIN DIM AUG MIN MAJ MAJ DIM'.split(' '));
+            'W H W W H WH H'.split(' '));
 
         return m;
     }();
