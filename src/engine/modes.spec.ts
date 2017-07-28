@@ -46,4 +46,13 @@ describe('Mode class', () => {
         const chords = mode.Chords(new Notes.Note('C'));
         expect(Chords.Chord.toString(chords)).to.equal('C MAJ,D MIN,E MIN,F MAJ,G MAJ,A MIN,B DIM');
     });
+
+    const checkModes = function () {
+        for (const modeName of Modes.Mode.Names()) {
+            it(' mode ' + modeName + ' has expected triads count', () => {
+                const mode = Modes.Mode.fromName(modeName);
+                expect(mode.triads.length).to.equal(mode.semitones.length);
+            });
+        }
+    }();
 });
