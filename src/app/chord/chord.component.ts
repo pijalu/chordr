@@ -64,12 +64,12 @@ export class ChordComponent implements OnInit {
 
     const nbVariation = this.chordService.VariationsCount(this.selectedRoot, newType);
     for (let i = 0; i < nbVariation; ++i) {
-      const variation = this.chordService.Variations(this.selectedRoot, this.selectedType, i - 1);
+      const variation = this.chordService.Variations(this.selectedRoot, this.selectedType, i);
       if (variation) {
         this.availableVariation.push(
           new ChordVariationData(this.selectedRoot + ' ' + this.selectedType,
             variation.join(','),
-            i - 1));
+            i));
       }
     }
   }
